@@ -1,0 +1,12 @@
+In project list remove deadline and add budget column which has button Budget 
+On click of this budget redirect to page where show list of budget added items for perticular project
+On this page above should have add work type button on which if user clicks add new work type 
+work type should have following fields 
+1. Name
+2. Category (Material, Machinary, Labour) fixed
+3. parent work type id
+
+when user adds budget
+
+Items - 
+Remove tax type, pretail price from item
