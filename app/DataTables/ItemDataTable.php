@@ -44,19 +44,19 @@ class ItemDataTable extends DataTable
                 return '<a href="'.url('edit-item/variant/'.$item->item_id).'">'.$item->name.'</a>';
             })
 
-            ->addColumn('item_qty', function($item){
-                if ($item->item_type != 'service') {
-                    $qty = ($item->item_qty != null || $item->item_qty>0 ) ? $item->item_qty : 0;
-                    $qtyOnHand = $item->qty_on_hand ? $item->qty_on_hand : 0;
-                    $totalVariant = $item->total_variant ? $item->total_variant : 0;
-                    if($qtyOnHand || $totalVariant > 0)
-                        return formatCurrencyAmount($qty)."<br/> <span class='color-3c8dbc'>".formatCurrencyAmount($qtyOnHand)."</span> in ".formatCurrencyAmount($totalVariant)." variants";
-                    else
-                        return formatCurrencyAmount($qty);
-                } else {
-                    return '-';
-                }
-            })
+            // ->addColumn('item_qty', function($item){
+            //     if ($item->item_type != 'service') {
+            //         $qty = ($item->item_qty != null || $item->item_qty>0 ) ? $item->item_qty : 0;
+            //         $qtyOnHand = $item->qty_on_hand ? $item->qty_on_hand : 0;
+            //         $totalVariant = $item->total_variant ? $item->total_variant : 0;
+            //         if($qtyOnHand || $totalVariant > 0)
+            //             return formatCurrencyAmount($qty)."<br/> <span class='color-3c8dbc'>".formatCurrencyAmount($qtyOnHand)."</span> in ".formatCurrencyAmount($totalVariant)." variants";
+            //         else
+            //             return formatCurrencyAmount($qty);
+            //     } else {
+            //         return '-';
+            //     }
+            // })
 
             ->addColumn('purchase_price', function($item){
                 $purchase_price = ($item->purchase_price != null || $item->purchase_price>0 ) ? formatCurrencyAmount($item->purchase_price) : formatCurrencyAmount(0);
@@ -124,7 +124,7 @@ class ItemDataTable extends DataTable
 
             ->addColumn(['data' => 'category', 'name' => 'sc.name', 'title' => __('Category')])
 
-            ->addColumn(['data' => 'item_qty', 'name' => 'sm.item_qty', 'title' => __('On hand')])
+            // ->addColumn(['data' => 'item_qty', 'name' => 'sm.item_qty', 'title' => __('On hand')])
 
             ->addColumn(['data' => 'purchase_price', 'name' => 'pp.price', 'title' => __('Purchase').' '.($this->currency->symbol)])
             // ->addColumn(['data' => 'retail_sale_price', 'name' => 'spr.price', 'title' => __('Retail').' '.($this->currency->symbol)])
