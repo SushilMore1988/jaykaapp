@@ -12,17 +12,17 @@
     <div class="card-header">
       <h5><a href="{{ url('project/list') }}">{{ __('Projects')  }}</a> >> {{ __('New Project')  }}</h5>
       <div class="card-header-right">
-        
+
       </div>
     </div>
-    <div class="card-block" id="project-add-container">      
+    <div class="card-block" id="project-add-container">
       <!-- [ Tabs ] start -->
       <div class="form-tabs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
             <a class="nav-link text-uppercase active" id="app_project-tab" data-toggle="tab" href="#app_project" role="tab" aria-controls="app_project" aria-selected="true">{{ __('Project Information')  }}</a>
           </li>
-          
+
         </ul>
       </div>
       <!-- [ Tabs ] end -->
@@ -39,20 +39,20 @@
                       <label for="project_name" generated="true" class="error display_inline_block"></label>
                     </div>
                   </div>
-      
+
                   <div class="form-group row rowMbFireTab-0 rowMb-1rem">
                     <label class="col-sm-2 control-label require">{{ __('Project Type')  }}</label>
                     <div class="col-sm-8">
                       <select id="project_type" name="project_type" class="form-control select2">
                         <option value="">{{ __('Select Type') }}</option>
-                        <option value="customer">{{ __('Customer') }}</option>
-                        <option value="product">{{ __('Product') }}</option>
-                        <option value="in_house">{{ __('In House') }}</option>
+                        <option value="infrastructure">{{ __('Infrastructure') }}</option>
+                        <option value="real_estate">{{ __('Real estate') }}</option>
+                        {{-- <option value="in_house">{{ __('In House') }}</option> --}}
                       </select>
                       <label for="project_type" id="project_type_error" generated="true" class="error display_inline_block"></label>
                     </div>
                   </div>
-                  
+
                   <div class="form-group row cusDiv rowMbFireTab-0 rowMbLg-0">
                     <label class="col-sm-2 control-label">{{ __('Customers')  }}</label>
                     <div class="col-sm-8">
@@ -63,7 +63,7 @@
                       </select>
                     </div>
                   </div>
-                
+
                   <div class="form-group row rowMb-0 rowMbFireTab-0 rowMbLg-0" id="charge-status">
                     <label class="col-sm-2 control-label">{{ __('Charge Type')  }} </label>
                     <div class="col-sm-3">
@@ -112,7 +112,7 @@
                       <label for="members" id="members_error" generated="true" class="error display_inline_block"></label>
                     </div>
                   </div>
-                 
+
                   <div class="form-group row">
                     <label class="col-sm-2 control-label require">{{ __('Start Date')  }}</label>
                     <div class="col-sm-3">
@@ -122,7 +122,7 @@
                     <div class="col-sm-3">
                       <input type="text" id="endDate" name="end_date" class="form-control">
                       <label for="end_date" id="endDate-error" generated="true" class="error display_inline_block"></label>
-                      
+
                     </div>
                   </div>
                   <div class="form-group row">
@@ -151,9 +151,9 @@
               </div>
             </div>
             <div class="col-sm-8 px-0">
-              <button class="btn btn-primary custom-btn-small" type="button" id="btnSubmit"><i class="comment_spinner spinner fa fa-spinner fa-spin custom-btn-small display_none"></i><span id="spinnerText">{{ __('Submit') }} </span></button>   
+              <button class="btn btn-primary custom-btn-small" type="button" id="btnSubmit"><i class="comment_spinner spinner fa fa-spinner fa-spin custom-btn-small display_none"></i><span id="spinnerText">{{ __('Submit') }} </span></button>
               <a href="{{ url('project/list') }}" class="btn btn-danger custom-btn-small">{{ __('Cancel')  }}</a>
-            </div>  
+            </div>
           </div>
         </form>
     </div>

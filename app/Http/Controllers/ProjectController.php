@@ -604,6 +604,95 @@ class ProjectController extends Controller
     return view('admin.project.details', $data);
   }
 
+  public function budget($id)
+  {
+      $data['menu'] = 'project';
+      $data['page_title'] = __('Project Details');
+      $data['header']  = 'project';
+      $data['navbar']  = 'details';
+      $data['totalTask'] = DB::table('tasks')
+        ->where('tasks.related_to_type', 1)
+        ->where('tasks.related_to_id', $id)
+        ->count();
+      $data['completedTask'] = DB::table('tasks')
+        ->where('tasks.related_to_type', 1)
+        ->where('related_to_id', $id)->where('task_status_id', 4)
+        ->count();
+      $data['todayActivities'] = Activity::where([
+                                  'object_type' => 'Project',
+                                  'object_id' => $id
+                                ])
+                                ->orderBy('id', 'desc')
+                                ->whereDate('created_at', Carbon::today())->get();
+      $data['thisWeekActivities'] = Activity::where([
+                                  'object_type' => 'Project',
+                                  'object_id' => $id
+                                ])
+                                ->orderBy('id', 'desc')
+                                ->where('created_at', '>=', Carbon::today()->subDays(7))->get();
+      $data['project'] = DB::table('projects')
+        ->where('projects.id',$id)
+        ->select('projects.*','dm.first_name','dm.last_name','ps.name as status_name', 'users.full_name as userName')
+        ->leftJoin('customers as dm','dm.id','=','projects.customer_id')
+        ->leftJoin('users','users.id','=','projects.user_id')
+        ->leftJoin('project_statuses as ps','ps.id','=','projects.project_status_id')
+        ->first();
+      if (empty($data['project'])) {
+        \Session::flash('fail', __('The data you are trying to access is not found.'));
+        return redirect()->back();
+      }
+      if ($data['project']->due_date == null) {
+        $datediff = time() - strtotime($data['project']->begin_date);
+        $data['dayCount'] = abs(intval(round($datediff / (60 * 60 * 24))));
+        $data['dayTitle'] = __('Days passed');
+      } else {
+        $datediff = time() - strtotime($data['project']->due_date);
+        $data['dayCount'] = abs(intval(round($datediff / (60 * 60 * 24))));
+        $data['dayTitle'] = __('Days left');
+      }
+
+      $data['projectMembers'] = DB::table('project_members')
+          ->leftJoin('users','users.id','=','project_members.user_id')
+          ->where('project_members.project_id', $id)
+          ->get();
+      $data['users']= User::where('is_active', 1)->get();
+      $data['tags'] = DB::table('tag_assigns')
+                    ->leftJoin('tags','tags.id','=','tag_assigns.tag_id')
+                    ->select(DB::raw("(GROUP_CONCAT(tags.name SEPARATOR ',')) as `all_tags`"))
+                    ->groupBy('tag_assigns.reference_id')
+                    ->where([
+                      'tag_assigns.reference_id'=> $id,
+                      'tag_assigns.tag_type'=> 'project'
+                    ])->first();
+      $newArry = [];
+      foreach ($data['projectMembers'] as $key => $value) {
+        $icon = (new File)->getFiles('USER', $value->user_id);
+        if (count($icon) != 0) {
+          $value->imageIcon = $icon[0]->file_name;
+        }
+        $newArry[] = $value->id;
+      }
+      $data['oldMembers'] = json_encode($newArry);
+      $data['total_logged_time'] = $this->project->projectLoggedTime($id);
+      $array = [];
+      $data['amounts'] = $amounts = (new SaleOrder)->getMoneyStatus(['project_id' => $id]);
+      $allCurrency = [];
+      $overdueCurrency = [];
+      foreach ($amounts['amounts'] as $amount) {
+        if (isset($amount->currency->symbol) && !empty($amount->currency->symbol)) {
+          $allCurrency[] =  $amount->currency->symbol;
+        }
+      }
+      foreach ($amounts['overDue'] as $amount) {
+        if (isset($amount->currency->symbol) && !empty($amount->currency->symbol)) {
+          $overdueCurrency[] =  $amount->currency->symbol;
+        }
+      }
+      $data['allCurrency'] = array_diff($allCurrency, $overdueCurrency);
+
+    return view('admin.project.budget', $data);
+  }
+
   public function removeProjectmember(Request $request)
   {
       if ($request->m_id && $request->p_id) {

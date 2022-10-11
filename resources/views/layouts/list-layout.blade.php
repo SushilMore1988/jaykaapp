@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="{{ asset('datta-able/plugins/select2/css/select2.min.css') }}">
   <!-- Bootstrap multi select -->
   <link rel="stylesheet" href="{{ asset('dist/plugins/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
+  {{-- font-awesome cdn --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   @yield('listCSS')
 
@@ -21,7 +23,7 @@
       @yield('list-title')
       <div class="card-header-right d-inline-block">
         @yield('list-add-button')
-        
+
       </div>
     </div>
     <div class="card-body p-0">
@@ -36,7 +38,7 @@
           <div class="table-responsive">
             {!! $dataTable->table(['class' => 'table table-striped table-hover dt-responsive', 'width' => '100%', 'cellspacing' => '0']) !!}
           </div>
-          @yield('special-note')  
+          @yield('special-note')
         </div>
       </div>
     </div>
@@ -52,7 +54,7 @@
         </button>
       </div>
       <div class="modal-body">
-          
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary custom-btn-small" data-dismiss="modal">{{ __('Close') }}</button>

@@ -21,7 +21,7 @@ class ItemDataTable extends DataTable
                     ' . csrf_field() . '
                         <input type="hidden" name="id" value="'.$item->item_id.'">
                         <button title="' . __('Delete') . '" class="btn btn-xs btn-danger" type="button" data-toggle="modal" data-id="'. $item->item_id .'" data-target="#confirmDelete" data-label = "Delete" data-title="' . __('Delete item') . '" data-message="' . __('Are you sure to delete this item?') . '">
-                            <i class="feather icon-trash-2"></i> 
+                            <i class="feather icon-trash-2"></i>
                         </button>
                     </form>' : '';
                 return $edit.$delete;
@@ -63,10 +63,10 @@ class ItemDataTable extends DataTable
                 return $purchase_price;
             })
 
-            ->addColumn('retail_sale_price', function($item){
-                $retail_price = ($item->retail_sale_price != null || $item->retail_sale_price > 0 ) ? formatCurrencyAmount($item->retail_sale_price) : formatCurrencyAmount(0);
-                return $retail_price;
-            })
+            // ->addColumn('retail_sale_price', function($item){
+            //     $retail_price = ($item->retail_sale_price != null || $item->retail_sale_price > 0 ) ? formatCurrencyAmount($item->retail_sale_price) : formatCurrencyAmount(0);
+            //     return $retail_price;
+            // })
 
             ->addColumn('inactive', function ($item) {
                 if ($item->is_active == 1) {
@@ -81,56 +81,56 @@ class ItemDataTable extends DataTable
 
             ->make(true);
     }
- 
+
     public function query()
     {               // get purcahase price
-        $items = Item::leftJoin('purchase_prices as pp','pp.item_id','=','items.id') 
+        $items = Item::leftJoin('purchase_prices as pp','pp.item_id','=','items.id')
                     // get category description
-                  ->leftJoin('stock_categories as sc','sc.id','=','items.stock_category_id') 
+                  ->leftJoin('stock_categories as sc','sc.id','=','items.stock_category_id')
                     // get all item with individual total no. of quantitiy
                   ->leftJoin(DB::raw("(SELECT item_id,sum(quantity) as item_qty FROM stock_moves GROUP BY item_id
                     ) as sm"),function($join_sm){
-                      $join_sm->on("sm.item_id","=","items.id"); 
+                      $join_sm->on("sm.item_id","=","items.id");
                     })
                     // get item vairiant
                   ->leftJoin(DB::raw("(SELECT vari.parent_id as p_id,COUNT(vari.parent_id) as total_variant,sum(sm.qty_on_hand) as qty_on_hand FROM items as vari LEFT JOIN (SELECT item_id,sum(quantity) as qty_on_hand FROM `stock_moves` GROUP BY item_id)as sm on sm.item_id=vari.id GROUP BY vari.parent_id)as varian"),function($join){
                       $join->on('varian.p_id','=','items.id');
-                  }) 
-                    // get whole-sale price 
+                  })
+                    // get whole-sale price
                   ->leftJoin(DB::raw("(SELECT item_id,price FROM sale_prices WHERE sale_type_id = 2) as sph"),function($join_sph){
-                    $join_sph->on('sph.item_id', '=', 'items.id'); 
+                    $join_sph->on('sph.item_id', '=', 'items.id');
                    })
-                    // get retail price 
+                    // get retail price
                   ->leftJoin(DB::raw("(SELECT item_id,price FROM sale_prices WHERE sale_type_id = 1) as spr"), function($join_spr){
                     $join_spr->on('spr.item_id', '=', 'items.id');
-                  }) 
+                  })
                    // get files
                   ->leftJoin('files as fl', function($join) {
                     $join->on('fl.object_id', '=', 'items.id')
                          ->where('fl.object_type', '=', 'Item');
-                  })  
+                  })
                   ->where('parent_id', 0)
                   ->select("varian.qty_on_hand","varian.total_variant","items.id as item_id","items.is_active","items.description","items.name","items.stock_category_id","pp.price as purchase_price","sc.name as category","sm.item_qty as item_qty","sph.price as whole_sale_price","spr.price as retail_sale_price", 'items.item_type', 'fl.file_name');
         return $this->applyScopes($items);
     }
-    
+
     public function html()
     {
         return $this->builder()
-            
+
             ->addColumn(['data' => 'img', 'name' => 'img', 'title' => __('Picture'), 'orderable' => false, 'searchable' => false])
 
             ->addColumn(['data' => 'description', 'name' => 'items.name', 'title' => __('Name')])
-            
+
             ->addColumn(['data' => 'category', 'name' => 'sc.name', 'title' => __('Category')])
-           
+
             ->addColumn(['data' => 'item_qty', 'name' => 'sm.item_qty', 'title' => __('On hand')])
 
-            ->addColumn(['data' => 'purchase_price', 'name' => 'pp.price', 'title' => __('Purchase').' '.($this->currency->symbol)]) 
-            ->addColumn(['data' => 'retail_sale_price', 'name' => 'spr.price', 'title' => __('Retail').' '.($this->currency->symbol)])
-            
+            ->addColumn(['data' => 'purchase_price', 'name' => 'pp.price', 'title' => __('Purchase').' '.($this->currency->symbol)])
+            // ->addColumn(['data' => 'retail_sale_price', 'name' => 'spr.price', 'title' => __('Retail').' '.($this->currency->symbol)])
+
             ->addColumn(['data' => 'inactive', 'name' => 'inactive', 'title' => __('Status'), 'orderable' => false])
-            
+
             ->addColumn(['data' => 'action', 'name' => 'action', 'title' => __('Action'), 'orderable' => false, 'searchable' => false])
 
             ->parameters([

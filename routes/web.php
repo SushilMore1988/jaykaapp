@@ -698,6 +698,7 @@ Route::group(['middleware' => ['auth', 'locale'] ], function() {
     Route::get('project/add', 'ProjectController@create')->middleware(['permission:add_project']);
     Route::post('project/store', 'ProjectController@store');
     Route::get('project/details/{id}', 'ProjectController@details')->middleware(['permission:manage_project|own_project']);
+    Route::get('project/budget/{id}', 'ProjectController@budget');
     Route::get('project/edit/{id}', 'ProjectController@editProject')->middleware(['permission:edit_project']);
     Route::post('project/update', 'ProjectController@updateProject');
     Route::post('project/delete', 'ProjectController@projectDestroy')->middleware(['permission:delete_project']);

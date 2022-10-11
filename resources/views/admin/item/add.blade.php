@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('css')
 {{-- select2 css --}}
-<link rel="stylesheet" href="{{ asset('datta-able/plugins/select2/css/select2.min.css') }}"> 
+<link rel="stylesheet" href="{{ asset('datta-able/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('dist/css/item.min.css') }}">
 @endsection
 @section('content')
@@ -11,7 +11,7 @@
     <div class="card-header">
       <h5><a href="{{ url('item') }}">{{ __('Items') }}</a> >> {{ __('New Item') }}</h5>
       <div class="card-header-right">
-        
+
       </div>
     </div>
     <div class="card-block">
@@ -20,7 +20,7 @@
           <li class="nav-item">
             <a class="nav-link active text-uppercase" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">{{ __('Item Information') }}</a>
           </li>
-          
+
         </ul>
       </div>
       <form id="itemAddForm" class="form-horizontal" action="{{ url('save-item') }}" method="post" enctype="multipart/form-data">
@@ -93,7 +93,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-5">
+                  {{-- <div class="col-sm-5">
                     <div class="form-group row">
                       <label class="col-sm-5 col-form-label pr-0">{{ __('Tax Type')  }}</label>
                       <div class="col-sm-7 pl-md-2">
@@ -104,7 +104,7 @@
                         </select>
                       </div>
                     </div>
-                  </div>
+                  </div> --}}
                 </div>
                 <div class="form-group row">
                   <label class="col-sm-2 control-label">{{ __('Item Description')  }}</label>
@@ -116,7 +116,7 @@
                 <div class="form-group row">
                   <label class="col-sm-2 control-label require">{{ __('Purchase Price')  }}</label>
                   <div class="col-sm-8 pl-sm-3-custom">
-                    <div class="input-group">                      
+                    <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text">{{ $currency_symbol }}</span>
                       </div>
@@ -124,7 +124,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group row">
+                {{-- <div class="form-group row">
                   <label class="col-sm-2 control-label">{{ __('Retail Price')  }}</label>
                   <div class="col-sm-8 pl-sm-3-custom">
                     <div class="row">
@@ -138,7 +138,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> --}}
                 <div class="form-group row">
                 <label class="col-sm-2 control-label">{{  __('Status')  }}</label>
                 <div class="col-sm-8 pl-sm-3-custom">
@@ -154,7 +154,7 @@
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" name="item_image" id="validatedCustomFile">
                       <label class="custom-file-label overflow-hidden" for="validatedCustomFile">{{ __('Upload Photo')  }}</label>
-                    </div>                    
+                    </div>
                   </div>
                 </div>
                 <div class="form-group row" id="prvw" hidden="true">
@@ -211,7 +211,7 @@
                 </div>
               </div>
             </div>
-          
+
             <div class="form-group row" id="variant-tab">
               <div class="switch switch-primary d-inline ml-3">
                 <input class="minimal" type="checkbox" id="multi_variants" name="multi_variants">
@@ -277,11 +277,11 @@
                 </div>
               </div>
             </div>
-          
-            
+
+
           </div>
           <div class="col-sm-8 pl-sm-3-custom px-0 mobile-margin">
-            <button class="btn btn-primary custom-btn-small custom-variant-title-validation" type="submit" id="btnSubmit">{{  __('Submit')  }}</button>   
+            <button class="btn btn-primary custom-btn-small custom-variant-title-validation" type="submit" id="btnSubmit">{{  __('Submit')  }}</button>
             <a href="{{ url('item') }}" class="btn btn-danger custom-btn-small">{{ __('Cancel') }}</a>
           </div>
         </div>

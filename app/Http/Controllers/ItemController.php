@@ -100,7 +100,6 @@ class ItemController extends Controller
             'item_id'     => 'required|unique:items,stock_id',
             'item_type'   => 'required',
             'units'       => 'required',
-            'tax_type_id' => 'required',
             'item_image'  => [new CheckValidFile(getFileExtensions(2))],
         ]);
 
@@ -120,7 +119,6 @@ class ItemController extends Controller
             $data['item_unit_id'] = stripBeforeSave($request->units);
             $data['description']  = !empty($request->description) ? $request->description : '';
             $data['hsn']          = stripBeforeSave($request->hsn);
-            $data['tax_type_id']  = stripBeforeSave($request->tax_type_id);
             $data['is_active']    = $request->inactive;
             if ($request->item_type == 'service') {
                 $request['multi_variants'] = null;

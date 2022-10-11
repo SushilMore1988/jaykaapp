@@ -26,4 +26,7 @@
   <li class="nav-item">
     <a class="nav-link h-lightblue {{$navbar=='activity' ? 'active':''}}" id="project-activity-tab" href='{{url("project/activities/".$project->id)}}{{isset($sub_menu) ? "?$sub_menu" : ""}}'>{{ __('Activities') }}</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link h-lightblue {{$navbar=='activity' ? 'active':''}}" id="project-activity-tab" href='{{url("project/budget/".$project->id)}}{{isset($sub_menu) ? "?$sub_menu" : ""}}'>{{ __('Budget') }}</a>
+  </li>
 </ul>

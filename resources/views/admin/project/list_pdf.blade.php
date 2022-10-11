@@ -45,7 +45,7 @@
     </thead>
     @foreach($project as $data)
       <tr>
-        <td class="text-center list-td"> {{ $data['name'] }} 
+        <td class="text-center list-td"> {{ $data['name'] }}
             <br/><span> {{ str_replace('_', ' ', ucwords($data['project_type'], '_')) }} </span>
         </td>
         <td class="text-center list-td"> {{ $data['first_name'] . ' ' . $data['last_name'] }} </td>
@@ -55,6 +55,6 @@
         <td class="text-center list-td"> {{ $data['totalTask'] }} {{ $data['completedTask'] > 0 ? ' / ' . $data['completedTask'] : '' }} </td>
         <td class="text-center list-td"> {{ $data['status_name'] }} </td>
       </tr>
-     @endforeach 
+     @endforeach
 </table>
 @endsection

@@ -30,6 +30,18 @@ class ProjectDataTable extends DataTable{
                 ' : '';
                 return $edit . $delete;
             })
+            ->addColumn('budget', function ($projects) {
+                $edit = (Helpers::has_permission(Auth::user()->id, 'edit_project')) ? '<a href="' . url("project/details/". $projects->project_id) . '" class="btn btn-xs btn-primary ml-3"><i class="fa fa-dollar" style="font-size:13px;color:red"></i></a>&nbsp;' : '';
+                $delete = (Helpers::has_permission(Auth::user()->id, 'delete_project')) ? '
+                <form method="post" action="' . url("project/delete") . '" class="display_inline" id="delete-item-' . $projects->project_id . '">
+                ' . csrf_field() . '
+                <input type="hidden" name="project_id" value="'. $projects->project_id .'">
+
+                </form>
+                ' : '';
+                return $edit . $delete;
+            })
+
             ->addColumn('project_name', function ($projects) {
                 $projectName = $projects->name;
                 if (mb_strlen($projectName) > 30) {
@@ -63,7 +75,7 @@ class ProjectDataTable extends DataTable{
             ->addColumn('id', function ($projects) {
                 return "<a href='" . url( "project/details/" . $projects->project_id) . "'>" . $projects->project_id . "</a>";
             })
-            ->rawColumns(['action', 'project_name', 'customer_name', 'totalTask', 'project_due_date', 'project_begin_date', 'id'])
+            ->rawColumns(['action', 'project_name', 'customer_name', 'totalTask', 'project_due_date', 'project_begin_date', 'id','budget'])
             ->make(true);
     }
 
@@ -84,8 +96,9 @@ class ProjectDataTable extends DataTable{
             ->addColumn(['data' => 'project_name', 'name' => 'projects.name', 'title' => __('Project name'), 'orderable' => true ])
             ->addColumn(['data' => 'project_name', 'name' => 'projects.project_type', 'visible' => false, 'orderable' => true ])
             ->addColumn(['data' => 'customer_name', 'name' => 'customers.first_name', 'title' => __('Customer'), 'orderable' => true ])
-            ->addColumn(['data' => 'project_begin_date', 'name' => 'begin_date', 'title' => __('Start date'), 'orderable' => true ])
-            ->addColumn(['data' => 'project_due_date', 'name' => 'due_date', 'title' => __('Deadline'), 'orderable' => true ])
+            ->addColumn(['data' => 'project_begin_date', 'name' => 'begin_date', 'title' => __('Start date'), 'orderable' => true  ])
+            // ->addColumn(['data' => 'project_due_date', 'name' => 'due_date', 'title' => __('deadline '), 'orderable' => true  ])
+            ->addColumn(['data' => 'budget', 'name' => 'budget', 'title' => __('Budget'), 'orderable' => true  ])
             ->addColumn(['data' => 'totalTask', 'name' => 'totalTask', 'title' => __('Total Task'), 'orderable' => true ])
             ->addColumn(['data' => 'status_name', 'name' => 'project_statuses.name', 'title' => __('Status'), 'orderable' => true ])
             ->addColumn(['data' => 'action', 'name' => 'action', 'title' => __('Action'), 'orderable' => false, 'searchable' => false])
@@ -94,7 +107,9 @@ class ProjectDataTable extends DataTable{
                 'language' => [
                         'url' => url('/resources/lang/'.config('app.locale').'.json'),
                     ],
-                'order' => [[ 0, 'desc' ]]
+                'order' => [[ 0, 'desc' ]],
+
+
             ]);
     }
 
