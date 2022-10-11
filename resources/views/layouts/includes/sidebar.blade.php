@@ -43,11 +43,11 @@
                 </li>
                 @endif
 
-                @if(Helpers::has_permission(Auth::user()->id, 'manage_pos'))
+                {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_pos'))
                 <li data-username="POS" class="nav-item {{ $menu == 'pos' ? 'active' : '' }}">
                     <a href="{{ url('pos') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">{{ __('Point of Sale') }}</span></a>
                 </li>
-                @endif
+                @endif --}}
 
                 @if(Helpers::has_permission(Auth::user()->id, 'manage_quotation|manage_invoice|manage_payment|own_quotation|own_invoice|own_payment'))
                 <li data-username="Sales Quotations Invoices Payments" class="nav-item pcoded-hasmenu {{$menu == 'sales' ? 'pcoded-trigger active' : ''}}">
@@ -130,9 +130,9 @@
                 <li data-username="Task" class="nav-item {{ $menu == 'time_sheet' ? 'active' : '' }}"><a href="{{ url('time-sheet/list') }}" class="nav-link"><span class="pcoded-micon"><i class="mdi mdi-calendar-clock"></i></span><span class="pcoded-mtext">{{ __('Timesheets') }}</span></a></li>
                 @endif
 
-                @if(Helpers::has_permission(Auth::user()->id,'manage_ticket|own_ticket'))
+                {{-- @if(Helpers::has_permission(Auth::user()->id,'manage_ticket|own_ticket'))
                 <li data-username="Ticket" class="nav-item {{ $menu == 'ticket' ? 'active' : '' }}"><a href="{{ url('ticket/list') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-file-plus"></i></span><span class="pcoded-mtext">{{ __('Tickets') }}</span></a></li>
-                 @endif
+                 @endif --}}
 
                 @if(Helpers::has_permission(Auth::user()->id,'manage_calendar'))
                 <li data-username="Calendar" class="nav-item {{ $menu == 'calendar' ? 'active' : '' }}"><a href="{{ url('calendar') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-calendar"></i></span><span class="pcoded-mtext">{{ __('Calender') }}</span></a></li>
@@ -143,9 +143,9 @@
                 @endif
 
                 <!--Add Leads Menu here (Arif 24-01-2019)-->
-                @if(Helpers::has_permission(Auth::user()->id, 'manage_lead|own_lead'))
+                {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_lead|own_lead'))
                 <li data-username="Lead" class="nav-item {{ $menu == 'lead' ? 'active' : '' }}"><a href="{{ url('lead/list') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-phone"></i></span><span class="pcoded-mtext">{{ __('Leads') }}</span></a></li>
-                @endif
+                @endif --}}
 
                 @if(Helpers::has_permission(Auth::user()->id, 'manage_knowledge_base|own_knowledge_base'))
                     <li data-username="Knowledge" class="nav-item {{ $menu == 'knowledge_base' ? 'active' : '' }}"><a href="{{ url('knowledge-base') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-book"></i></span><span class="pcoded-mtext">{{ __('Knowledge Base') }}</span></a></li>
@@ -179,9 +179,9 @@
                         <li class="{{ isset($sub_menu) && $sub_menu == 'transaction/income-vs-expense' ? 'active' : '' }}"><a href="{{ url('transaction/income-vs-expense') }}" class="">{{ __('Income vs Expenses') }}</a></li>
                         @endif
 
-                        @if(Helpers::has_permission(Auth::user()->id, 'manage_lead'))
+                        {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_lead'))
                         <li class="{{ isset($sub_menu) && $sub_menu == 'leads-report' ? 'active' : '' }}"><a href="{{ url('report/leads-report') }}" class="">{{ __('Leads Report') }}</a></li>
-                        @endif
+                        @endif --}}
                     </ul>
                 </li>
                 @endif
@@ -210,9 +210,9 @@
                         <li class="{{ isset($sub_menu) && $sub_menu == 'sms-temp' ? 'active' : '' }}"><a href="{{ url('customer-sms-temp/5') }}" class="">{{ __('SMS Templates') }}</a></li>
                         @endif
 
-                        @if(Helpers::has_permission(Auth::user()->id, 'manage_preference|manage_theme_preference'))
+                        {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_preference|manage_theme_preference'))
                         <li class="{{ isset($sub_menu) && $sub_menu == 'preference' ? 'active' : '' }}"><a href="{{ url('setting-preference') }}" class="">{{ __('Preference') }}</a></li>
-                        @endif
+                        @endif --}}
 
                         @if(Helpers::has_permission(Auth::user()->id, 'manage_barcode'))
                         <li class="{{ isset($sub_menu) && $sub_menu == 'barcode' ? 'active' : '' }}"><a href="{{ url('barcode/create') }}" class="">{{ __('Print Barcode/Level') }}</a></li>
