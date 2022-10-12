@@ -10,3 +10,21 @@ when user adds budget
 
 Items - 
 Remove tax type, pretail price from item
+
+//
+12/10/2022
+
+Project
+1. Remove approximate hours from project create
+2. Remove Charge Type
+3. Change name of Total Cost to Total Budget also change the placeholder accordingly
+
+Project - Budget
+
+1. add table to show budget
+2. Above table create button to add Work Type (Fields as explained above) . also this may have parent work type. so parent work type field is nullable
+3. Create project budget model with migration 
+4. project budgets have following fields
+    1. Sub Work type
+    2. Budget
+5. Show the total sum of added project budget in top of the table which is total budget of the project (If this is greater than the Total budget(right now named as total cost) then show the message Your total budget is less than the total work type budget)
