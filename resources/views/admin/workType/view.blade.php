@@ -6,7 +6,7 @@
 @endsection
 
 @section('list-title')
-  <h5><a href='{{url("item")}}'> {{ __('Items')  }} </a></h5>
+  <h5><a href='{{url("workType")}}'> {{ __('workType')  }} </a></h5>
 @endsection
 
 
