@@ -29,8 +29,9 @@ use PDF;
 use App\Exports\ItemListExport;
 use App\Rules\CheckValidFile;
 
-class WorkType extends Controller
+class WorkTypeController extends Controller
 {
+
     // public function __construct(Report $report)
     // {
     //     $this->report = $report;
@@ -72,23 +73,5 @@ class WorkType extends Controller
         return view('admin.workType.add', $data);
     }
 
-    public function save(Request $request)
-    {
-
-        $request->validate([
-            'workType_name' => 'required',
-        ]);
-
-
-        $workType = new workType;
-        $workType->workType	=$request->worktype;
-        $workType->save();
-
-
-
-
-
-
-
-    }
 }
+
