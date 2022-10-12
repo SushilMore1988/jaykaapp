@@ -607,9 +607,9 @@ class ProjectController extends Controller
   public function budget($id)
   {
       $data['menu'] = 'project';
-      $data['page_title'] = __('Project Details');
+      $data['page_title'] = __('Project Budget');
       $data['header']  = 'project';
-      $data['navbar']  = 'details';
+      $data['navbar']  = 'budget';
       $data['totalTask'] = DB::table('tasks')
         ->where('tasks.related_to_type', 1)
         ->where('tasks.related_to_id', $id)

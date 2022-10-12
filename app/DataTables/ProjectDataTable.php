@@ -31,7 +31,7 @@ class ProjectDataTable extends DataTable{
                 return $edit . $delete;
             })
             ->addColumn('budget', function ($projects) {
-                $edit = (Helpers::has_permission(Auth::user()->id, 'edit_project')) ? '<a href="' . url("project/details/". $projects->project_id) . '" class="btn btn-xs btn-primary ml-3"><i class="fa fa-dollar" style="font-size:13px;color:red"></i></a>&nbsp;' : '';
+                $edit = (Helpers::has_permission(Auth::user()->id, 'edit_project')) ? '<a href="' . url("project/budget/". $projects->project_id) . '" class="btn btn-xs btn-primary ml-3"><i class="fa fa-dollar" style="font-size:13px;color:red"></i></a>&nbsp;' : '';
                 $delete = (Helpers::has_permission(Auth::user()->id, 'delete_project')) ? '
                 <form method="post" action="' . url("project/delete") . '" class="display_inline" id="delete-item-' . $projects->project_id . '">
                 ' . csrf_field() . '
