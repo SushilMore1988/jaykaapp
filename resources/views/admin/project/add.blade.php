@@ -65,14 +65,14 @@
                   </div>
 
                   <div class="form-group row rowMb-0 rowMbFireTab-0 rowMbLg-0" id="charge-status">
-                    <label class="col-sm-2 control-label">{{ __('Charge Type')  }} </label>
+                    {{-- <label class="col-sm-2 control-label">{{ __('Charge Type')  }} </label>
                     <div class="col-sm-3">
                       <select id="charge_type" name="charge_type" class="form-control select2">
                         <option value="1">{{ __('Fixed Rate')  }} </option>
                         <option value="2">{{ __('Project Hour')  }} </option>
                         <option value="3">{{ __('Task Hour')  }} </option>
                       </select>
-                    </div>
+                    </div> --}}
                     <label class="col-sm-2 control-label require">{{ __('Status')  }}</label>
                     <div class="col-sm-3">
                       <select id="status" name="status" class="form-control select2">
@@ -86,9 +86,9 @@
                   </div>
 
                   <div class="form-group row" id="total_cost_div">
-                    <label class="col-sm-2 control-label require">{{ __('Total Cost')  }}</label>
+                    <label class="col-sm-2 control-label require">{{ __('Total Budget')  }}</label>
                     <div class="col-sm-8">
-                      <input type="text" name="total_cost" id="total_cost" class="form-control positive-float-number" placeholder="{{ __('Please enter total project cost') }}">
+                      <input type="text" name="total_budget" id="total_cost" class="form-control positive-float-number" placeholder="{{ __('Please enter total project Budget') }}">
                     </div>
                   </div>
                   <div class="form-group row" id="rate_per_hour_div">
@@ -98,10 +98,10 @@
                     </div>
                   </div>
                   <div class="form-group row rowMbFireTab-0 rowMb-0p">
-                    <label class="col-sm-2 control-label">{{ __('Approximate Hour')  }}</label>
+                    {{-- <label class="col-sm-2 control-label">{{ __('Approximate Hour')  }}</label>
                     <div class="col-sm-3">
                       <input type="text" name="project_hours" class="form-control positive-float-number" placeholder="{{ __('Approximate Hour')  }}">
-                    </div>
+                    </div> --}}
                     <label class="col-sm-2 control-label require">{{ __('Members')  }}</label>
                     <div class="col-sm-3 small-margin-2">
                       <select id="members" name="members[]" class="form-control select2" multiple="multiple">

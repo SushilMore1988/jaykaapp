@@ -87,7 +87,6 @@ class ProjectController extends Controller
   {
     $this->validate($request, [
       'project_name' => 'required',
-      'charge_type'  =>'required',
       'status'     =>'required',
       'members'      =>'required',
       'start_date'   =>'required'
@@ -101,7 +100,6 @@ class ProjectController extends Controller
           $data['customer_id']            = (($request->project_type) == 'customer' ? $request->customer_id : NULL);
           $data['user_id']                = $user_id = Auth::user()->id;
           $data['project_status_id']      = $request->status;
-          $data['charge_type']            = $request->charge_type;
           $data['begin_date']             = DbDateFormat($request->start_date);
           $data['due_date']               = $request->end_date ? DbDateFormat($request->end_date) : NULL ;
           $data['improvement']            = 0;

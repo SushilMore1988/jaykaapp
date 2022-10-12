@@ -20,13 +20,13 @@
         <div class="col-md-12">
           <div class="d-flex justify-content-between mb-3">
             <div class="">Budget : 100</div>
-            <div class=""><button class="btn btn-primary custom-btn-small">New Work Type</button></div>
+            <div class=""><a href="{{ url('create/workType') }}"class="btn btn-primary custom-btn-small">New Work Type</a></div>
           </div>
           <div class="card mb-0">
             <div class="card-header">
               <h5 class="card-header-text">{{ __('Project Budget : List of Work Types') }}</h5>
               <span id="memberSetting" data-toggle="modal" data-target="#memberSettingModal" class="float-right cursor_pointer">
-                <button class="btn btn-primary" id="btn-add-member"><i class="fas fa-plus f-14 mr-0"></i></button>
+                <a href="" class="btn btn-primary" id="btn-add-member"><i class="fas fa-plus f-14 mr-0"></i></a>
               </span>
             </div>
           </div>

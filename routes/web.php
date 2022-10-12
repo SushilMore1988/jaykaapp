@@ -1,4 +1,6 @@
 <?php
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -879,4 +881,12 @@ Route::group(['middleware' => ['auth', 'locale'] ], function() {
 	Route::post('customer-panel/file/upload', 'FilesController@uploadEventAttachments');
 	Route::post('customer-panel/file/remove', 'FilesController@deleteEventAttachment');
 	Route::get('files/download/{id}', 'FilesController@downloadAttachment');
+
+
+    //work Type
+
+    Route::get('workType', 'WorkType@index')->middleware(['permission:manage_item']);
+    Route::get('create/workType', 'WorkType@create')->middleware(['permission:add_item']);
+    Route::post('save/workType', 'WorkType@save');
+
 

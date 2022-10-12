@@ -43,6 +43,14 @@
                 </li>
                 @endif
 
+                @if(Helpers::has_permission(Auth::user()->id, 'manage_item'))
+                <li data-username="Item" class="nav-item {{ $menu == 'item' ? 'active' : '' }}">
+                    <a href="{{ url('workType') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext">{{ __('Work Type') }}</span></a>
+                </li>
+                @endif
+
+
+
                 {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_pos'))
                 <li data-username="POS" class="nav-item {{ $menu == 'pos' ? 'active' : '' }}">
                     <a href="{{ url('pos') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-briefcase"></i></span><span class="pcoded-mtext">{{ __('Point of Sale') }}</span></a>
