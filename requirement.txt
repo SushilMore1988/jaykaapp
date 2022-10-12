@@ -28,3 +28,9 @@ Project - Budget
     1. Sub Work type
     2. Budget
 5. Show the total sum of added project budget in top of the table which is total budget of the project (If this is greater than the Total budget(right now named as total cost) then show the message Your total budget is less than the total work type budget)
+
+
+Purchase Order
+1. Add project id and sub work type id filed in purchase order table
+2. While creating purchase order add two fields select work type(which is sub work type) and project id (Both are mandatory fields)
+3. At the time of purchase order received deduct this amount from assogmed budget for the project and show the remaining amount(we will discuss how this we do)
