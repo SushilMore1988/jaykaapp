@@ -47,6 +47,8 @@ class CreatePurchaseOrdersTable extends Migration {
 			$table->string('payment_method_id', 50)->nullable()->index();
 			$table->decimal('total', 16, 8)->default(0);
 			$table->decimal('paid', 16, 8)->default(0);
+            $table->integer('project_id');
+            $table->integer('work_type_id');
 			$table->integer('payment_term_id')->unsigned()->index('purchase_orders_payment_term_id_foreign_idx');
 			$table->timestamps();
 		});
