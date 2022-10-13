@@ -13,10 +13,11 @@ class CreateWorkTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('worktypes', function (Blueprint $table) {
+        Schema::create('work_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->references('id')->on('worktypes');
-            $table->string('workType');
+            $table->string('name');
+            $table->string('category');
+            $table->foreignId('parent_id')->references('id')->on('work_types')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateWorkTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('worktypes');
+        Schema::dropIfExists('work_types');
     }
 }

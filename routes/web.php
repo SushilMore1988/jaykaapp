@@ -885,8 +885,9 @@ Route::group(['middleware' => ['auth', 'locale'] ], function() {
 
     //work Type
 
-    Route::get('workType', 'WorkTypeController@index');
-    Route::get('create/workType', 'WorkTypeController@create');
+    Route::get('work-type', 'WorkTypeController@index');
+    Route::get('create/work-type', 'WorkTypeController@create');
+    Route::post('store/work-type', 'WorkTypeController@store');
 
 
 

@@ -6,7 +6,7 @@
 @endsection
 
 @section('list-title')
-  <h5><a href='{{url("workType")}}'> {{ __('workType')  }} </a></h5>
+  <h5><a href='{{url("work-type")}}'> {{ __('Work Type')  }} </a></h5>
 @endsection
 
 
@@ -22,7 +22,7 @@
         <a href="{{ URL::to('itemimport') }}" class="btn btn-outline-primary custom-btn-small"><span class="fa fa-upload"> &nbsp;</span>{{ __('Import Items')  }}</a>
       @endif
 
-        <a href="{{ url('create/workType') }}" class="btn btn-outline-primary custom-btn-small"><span class="fa fa-plus"> &nbsp;</span>{{ __('New WorkType')  }}</a>
+        <a href="{{ url('create/work-type') }}" class="btn btn-outline-primary custom-btn-small"><span class="fa fa-plus"> &nbsp;</span>{{ __('New Work Type')  }}</a>
     </div>
   @endif
   <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">

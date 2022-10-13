@@ -20,7 +20,7 @@
         <div class="col-md-12">
           <div class="d-flex justify-content-between mb-3">
             <div class="">Budget : 100</div>
-            <div class=""><a href="{{ url('create/workType') }}"class="btn btn-primary custom-btn-small">New Work Type</a></div>
+            <div class=""><a href="{{ url('create/work-type') }}"class="btn btn-primary custom-btn-small">New Work Type</a></div>
           </div>
           <div class="card mb-0">
             <div class="card-header">

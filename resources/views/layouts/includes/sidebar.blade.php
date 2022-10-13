@@ -45,7 +45,7 @@
 
                 @if(Helpers::has_permission(Auth::user()->id, 'manage_item'))
                 <li data-username="Item" class="nav-item {{ $menu == 'item' ? 'active' : '' }}">
-                    <a href="{{ url('workType') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext">{{ __('Work Type') }}</span></a>
+                    <a href="{{ url('work-type') }}" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext">{{ __('Work Type') }}</span></a>
                 </li>
                 @endif
 

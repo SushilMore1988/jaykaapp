@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class workType extends Model
+class WorkType extends Model
 {
     use HasFactory;
     use HasFactory;
 
     protected $parentColumn = 'parent_id';
+
+    protected $fillable = ['name', 'category', 'parent_id'];
 
     public function parent()
     {

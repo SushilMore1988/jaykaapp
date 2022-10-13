@@ -13,7 +13,7 @@
 <div class="col-sm-12" id="add-item-container">
   <div class="card user-list">
     <div class="card-header">
-      <h5><a href="{{ url('workType') }}">{{ __('workType') }}</a> >> {{ __('New WorkType') }}</h5>
+      <h5><a href="{{ url('work-type') }}">{{ __('workType') }}</a> >> {{ __('New WorkType') }}</h5>
       <div class="card-header-right">
 
       </div>
@@ -27,7 +27,7 @@
 
         </ul>
       </div>
-      <form id="" class="form-horizontal" action="{{ url('save/workType') }}" method="post" enctype="multipart/form-data">
+      <form class="form-horizontal" action="{{ url('store/work-type') }}" method="post" enctype="multipart/form-data">
         <input type="hidden" value="{{ csrf_token() }}" name="_token" id="token">
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
@@ -37,73 +37,35 @@
 
                   <label class="col-sm-2 control-label require">{{ __('WorkType Name') }}</label>
                   <div class="col-sm-8 pl-sm-3-custom">
-                    <input type="text" class="form-control" placeholder="{{ __('WorkTypeName')  }}" name="workType_name" id="item_name" value="{{ old('workType_name') }}">
+                    <input type="text" class="form-control" placeholder="{{ __('WorkTypeName')  }}" name="name" id="item_name" value="{{ old('Name') }}">
                     <span id="checkMsg" class="text-danger"></span>
                   </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 control-label">{{  __('Category')  }}</label>
-                    <div class="col-sm-8 pl-sm-3-custom">
-                      <select class="form-control validation_select select2" name="inactive">
-                        <option value="1">Material</option>
-                        <option value="0">Machinary</option>
-                        <option value="0">Labour</option>
-                      </select>
-                    </div>
+                  <label class="col-sm-2 control-label">{{  __('Category')  }}</label>
+                  <div class="col-sm-8 pl-sm-3-custom">
+                    <select class="form-control validation_select select2" name="category">
+                      <option value="Material">Material</option>
+                      <option value="Machinary">Machinary</option>
+                      <option value="Labour">Labour</option>
+                    </select>
                   </div>
-                <div class="form-group row">
-                <label class="col-sm-2 control-label">{{  __('Types')  }}</label>
-                <div class="col-sm-8 pl-sm-3-custom">
-                    {{-- //dropdown --}}
-                    <div id="menu_area" class="menu-area">
-                                <div class="container">
-                                    <div class="row">
-                                        <nav class="navbar navbar-light navbar-expand-lg mainmenu">
-                                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                            <span class="navbar-toggler-icon"></span>
-                                            </button>
-                                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                                <ul class="navbar-nav mr-auto">
-
-                                                    <li class="dropdown">
-                                                        <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">WorkType</a>
-                                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                        <li><a href="#" name="worktype">Laravel</a></li>
-                                                        <li><a href="#" name="worktype">Node js</a></li>
-                                                        <li><a href="#" name="worktype">Python</a></li>
-                                                        <li class="dropdown">
-                                                            <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="worktype">Web Design</a>
-                                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                            <li><a href="#">Angular</a></li>
-                                                            <li><a href="#">React</a></li>
-                                                            <li><a href="#">Vue</a></li>
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="worktype">Operating System</a>
-                                                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                                    <li><a href="#" name="worktype">Windows</a></li>
-                                                                    <li><a href="#" name="worktype">Mac</a></li>
-                                                                    <li><a href="#" name="worktype">Ubantu</a></li>
-                                                                </ul>
-                                                            </li>
-                                                            </ul>
-                                                        </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-
-                    {{-- //end dropdown --}}
                 </div>
-              </div>
+                <div class="form-group row">
+                  <label class="col-sm-2 control-label">{{  __('Parent Work Type')  }}</label>
+                  <div class="col-sm-8 pl-sm-3-custom">
+                    <select class="form-control validation_select select2" name="parent_id">
+                      @foreach($workTypes as $workType)
+                      <option value="{{ $workType->id }}">{{ $workType->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
             </div>
         </div>
           <div class="col-sm-8 pl-sm-3-custom px-0 mobile-margin">
             <button class="btn btn-primary custom-btn-small custom-variant-title-validation" type="submit" id="btnSubmit">{{  __('Submit')  }}</button>
-            <a href="{{ url('workType') }}" class="btn btn-danger custom-btn-small">{{ __('Cancel') }}</a>
+            <a href="{{ url('work-type') }}" class="btn btn-danger custom-btn-small">{{ __('Cancel') }}</a>
           </div>
         </div>
       </form>
