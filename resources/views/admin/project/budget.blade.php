@@ -3,8 +3,9 @@
 <link rel="stylesheet" href="{{ asset('datta-able/plugins/select2/css/select2.min.css')}}">
 <link rel="stylesheet" href="{{ asset('dist/css/customer-panel.min.css')}}">
 @endsection
-
 @section('content')
+
+
 <div class="col-sm-12">
   <div class="card mb-2">
     <div class="card-header">
@@ -19,14 +20,14 @@
       <div class="row">
         <div class="col-md-12">
           <div class="d-flex justify-content-between mb-3">
-            <div class="">Budget : 100</div>
+            <div class="">Budget : {{ 100 }}</div>
             <div class=""><a href="{{ url('create/work-type') }}"class="btn btn-primary custom-btn-small">New Work Type</a></div>
           </div>
           <div class="card mb-0">
             <div class="card-header">
               <h5 class="card-header-text">{{ __('Project Budget : List of Work Types') }}</h5>
               <span id="memberSetting" data-toggle="modal" data-target="#memberSettingModal" class="float-right cursor_pointer">
-                <a href="" class="btn btn-primary" id="btn-add-member"><i class="fas fa-plus f-14 mr-0"></i></a>
+                <a href="" class="btn btn-primary" id="btn-add-member" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus f-14 mr-0 mt-2"></i></a>
               </span>
             </div>
           </div>
@@ -40,6 +41,24 @@
                 <img alt=" " src='{{url("dist/img/avatar.jpg")}}' class="user-img img-radius" data-toggle="tooltip" data-placement="top" title="{{ $data->full_name }}">
                 @endif
               </a>
+
+                   {{-- table --}}
+                    <div class="container mt-5">
+                        <table class="table table-bordered yajra-datatable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>work_type</th>
+                                    <th>budget</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                 {{-- table --}}
+
               @endforeach
             </div>
           </div>
@@ -48,6 +67,41 @@
     </div>
   </div>
 </div>
+
+ <!-- Modal -->
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                        <form action="{{ url('budget/store') }}"  method="post" class="needs-validation" novalidate>
+                            @csrf
+                            <input type="hidden" id="custId" name="project_id" value="{{ $project->id }}">
+                            <div class="form-group">
+                            <label for="WorkType">WorkType:</label>
+                            <select class = "form-control" id = "WorkType" name="work_type">
+                                @foreach($workTypes as $workType)
+                                <option value="{{ $workType->id }}">{{ $workType->name }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                            <div class = "form-group">
+                                <label for = "Budget">Budget</label>
+                                <input type = "number" class = "form-control p-2" name="budget">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+         <!-- Modal -->
 
 @endsection
 
@@ -65,3 +119,4 @@
 </script>
 <script src="{{ asset('dist/js/custom/project.min.js') }}"></script>
 @endsection
+work_type

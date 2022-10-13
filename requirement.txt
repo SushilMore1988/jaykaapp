@@ -1,14 +1,14 @@
-In project list remove deadline and add budget column which has button Budget 
+In project list remove deadline and add budget column which has button Budget
 On click of this budget redirect to page where show list of budget added items for perticular project
-On this page above should have add work type button on which if user clicks add new work type 
-work type should have following fields 
+On this page above should have add work type button on which if user clicks add new work type
+work type should have following fields
 1. Name
 2. Category (Material, Machinary, Labour) fixed
 3. parent work type id
 
 when user adds budget
 
-Items - 
+Items -
 Remove tax type, pretail price from item
 
 //
@@ -19,12 +19,13 @@ Project
 2. Remove Charge Type
 3. Change name of Total Cost to Total Budget also change the placeholder accordingly
 
+
 Project - Budget
 
-1. add table to show budget
+1. add table to show budget = done (13/10/2022)
 2. Above table create button to add Work Type (Fields as explained above) . also this may have parent work type. so parent work type field is nullable
-3. Create project budget model with migration 
-4. project budgets have following fields
+3. Create project budget model with migration = done (13/10/2022)
+4. project budgets have following fields = done (13/10/2022)
     1. Sub Work type
     2. Budget
 5. Show the total sum of added project budget in top of the table which is total budget of the project (If this is greater than the Total budget(right now named as total cost) then show the message Your total budget is less than the total work type budget)

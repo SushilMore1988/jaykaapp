@@ -55,7 +55,9 @@
                   <label class="col-sm-2 control-label">{{  __('Parent Work Type')  }}</label>
                   <div class="col-sm-8 pl-sm-3-custom">
                     <select class="form-control validation_select select2" name="parent_id">
+                        <option value="">Select Parent Work Type</option>
                       @foreach($workTypes as $workType)
+
                       <option value="{{ $workType->id }}">{{ $workType->name }}</option>
                       @endforeach
                     </select>

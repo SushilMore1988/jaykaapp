@@ -20,6 +20,8 @@ use App\Models\User;
 use App\Models\Activity;
 use App\Models\TagAssign;
 use App\Models\Tag;
+use App\Models\WorkType;
+use App\Models\Budget;
 use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -602,7 +604,7 @@ class ProjectController extends Controller
     return view('admin.project.details', $data);
   }
 
-  public function budget($id)
+  public function budget($id, Request $request)
   {
       $data['menu'] = 'project';
       $data['page_title'] = __('Project Budget');
@@ -687,8 +689,8 @@ class ProjectController extends Controller
         }
       }
       $data['allCurrency'] = array_diff($allCurrency, $overdueCurrency);
-
-    return view('admin.project.budget', $data);
+      $data['workTypes'] = WorkType::all();
+      return view('admin.project.budget', $data);
   }
 
   public function removeProjectmember(Request $request)
