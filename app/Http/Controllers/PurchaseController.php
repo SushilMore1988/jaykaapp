@@ -25,7 +25,9 @@ use App\Models\{
     Supplier,
     SupplierTransaction,
     TaxType,
-    TransactionReference
+    TransactionReference,
+    Project,
+    WorkType,
 };
 use App\Http\{
     Start\Helpers,
@@ -134,6 +136,8 @@ class PurchaseController extends Controller
         $data['custom_tax_type'] = $selectStartCustom . $taxOptions . $selectEndCustom . $taxHiddenField;
         $data['tax_type_custom'] = $selectStartCustom . $taxOptions . $selectEndCustom;
         $preference              = Preference::getAll()->pluck('value', 'field')->toArray();
+        $data['projects']=Project::all();
+        $data['workTypes']=WorkType::all();
         $data['exchange_rate_decimal_digits'] = $preference['exchange_rate_decimal_digits'];
         $data['default_currency']= $data['currencies']->where('id', $preference['dflt_currency_id'])->first();
         return view('admin.purchase.add', $data);
@@ -1042,7 +1046,7 @@ class PurchaseController extends Controller
         if ($emailResponse['status'] == true) {
             \Session::flash('success', __('Email has been sent successfully.'));
          }
-        
+
         return redirect()->intended('purchase/view-purchase-details/' . $orderNo);
     }
 

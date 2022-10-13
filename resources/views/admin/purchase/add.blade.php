@@ -72,14 +72,24 @@
             </div>
             <div class="col-md-6">
               <div class="form-group row">
-                <label class="col-form-label col-md-4" for="location">{{ __('Location') }}</label>
+                <label class="col-form-label col-md-4" for="Project Name">{{ __('Project Name') }}</label>
                 <div class="col-md-8 p-md-0">
-                  <select class="select2" name="location" id="location">
-                    @foreach($locations as $data)
+                  <select class="select2" name="projects" id="projects">
+                    @foreach($projects as $data)
                       <option value="{{ $data->id }}" <?= ($data->is_active =="1" ? 'selected':'')?>>{{$data->name}}</option>
                     @endforeach
                   </select>
                 </div>
+
+                <label class="col-form-label col-md-4" for="location">{{ __('Work Type') }}</label>
+                <div class="col-md-8 p-md-0">
+                  <select class="select2 mt-4" name="location" id="location">
+                    @foreach($workTypes as $data)
+                      <option value="{{ $data->id }}" <?= ($data->is_active =="1" ? 'selected':'')?>>{{$data->name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+
               </div>
             </div>
             <div class="col-md-6">
