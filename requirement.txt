@@ -32,6 +32,7 @@ Project - Budget
 
 
 Purchase Order
-1. Add project id and sub work type id filed in purchase order table
+1. Add project id and sub work type id filed in purchase order table = done (13/10/2022 but store Function Not completed only Form Is Updating.)
+
 2. While creating purchase order add two fields select work type(which is sub work type) and project id (Both are mandatory fields)
 3. At the time of purchase order received deduct this amount from assogmed budget for the project and show the remaining amount(we will discuss how this we do)
