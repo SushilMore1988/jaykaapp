@@ -137,6 +137,7 @@ class PurchaseController extends Controller
         $data['tax_type_custom'] = $selectStartCustom . $taxOptions . $selectEndCustom;
         $preference              = Preference::getAll()->pluck('value', 'field')->toArray();
         $data['projects']=Project::all();
+        $data['items']=Item::all();
         $data['workTypes']=WorkType::all();
         $data['exchange_rate_decimal_digits'] = $preference['exchange_rate_decimal_digits'];
         $data['default_currency']= $data['currencies']->where('id', $preference['dflt_currency_id'])->first();
@@ -153,9 +154,10 @@ class PurchaseController extends Controller
     {
         $this->validate($request, [
             'reference' => 'required|unique:purchase_orders,reference',
-            'location' => 'required',
             'order_date' => 'required',
             'supplier_id' => 'required',
+            'work_type_id' => 'required',
+            'project_id' => 'required',
             'custom_item_name.*' => 'required',
             'item_name.*' => 'required',
             'item_price.*' => 'required',
@@ -224,6 +226,8 @@ class PurchaseController extends Controller
             $order->invoice_type    = $request->inv_type;
             $order->discount_on     = $request->discount_on;
             $order->tax_type        = $tax_type;
+            $order->project_id        = $request->project_id;
+            $order->work_type_id        = $request->work_type_id;
             $order->has_tax         = $invItemTax;
             $order->has_description = $invItemDetails;
             $order->has_item_discount = $invItemDiscount;
@@ -244,7 +248,7 @@ class PurchaseController extends Controller
             $order->has_comment     = $noteCheck;
             $order->order_date      = DbDateFormat($request->order_date);
             $order->reference       = $request->reference;
-            $order->location_id     = $request->location;
+            //$order->location_id     = $request->location;
             $order->total           = validateNumbers($request->totalValue);
             $order->payment_term_id = $request->payment_term;
             $order->created_at      = date('Y-m-d H:i:s');
@@ -414,7 +418,7 @@ class PurchaseController extends Controller
         }
         $data['supplierData']         = Supplier::with('currency','country')->find($data['purchaseData']->supplier_id);
         $data['currencySymbol'] = $data['supplierData']->currency->symbol;
-        $data['locations']            = Location::getAll()->where('is_active', 1);
+       //$data['locations']            = Location::getAll()->where('is_active', 1);
         $data['paymentTerms']         = PaymentTerm::getAll();
         $data['purchaseReceiveTypes'] = PurchaseReceiveType::getAll();
         $data['taxTypeList']          = TaxType::getAll();

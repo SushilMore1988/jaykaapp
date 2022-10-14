@@ -71,26 +71,25 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="form-group row">
+                <div class="form-group row">
                 <label class="col-form-label col-md-4" for="Project Name">{{ __('Project Name') }}</label>
                 <div class="col-md-8 p-md-0">
-                  <select class="select2" name="projects" id="projects">
+                  <select class="select2" name="project_id" id="projects">
                     @foreach($projects as $data)
                       <option value="{{ $data->id }}" <?= ($data->is_active =="1" ? 'selected':'')?>>{{$data->name}}</option>
                     @endforeach
                   </select>
                 </div>
 
-                <label class="col-form-label col-md-4" for="location">{{ __('Work Type') }}</label>
+                <label class="col-form-label col-md-4" for="work_type">{{ __('Work Type') }}</label>
                 <div class="col-md-8 p-md-0">
-                  <select class="select2 mt-4" name="location" id="location">
+                  <select class="select2 mt-4" name="work_type_id" id="work_type">
                     @foreach($workTypes as $data)
                       <option value="{{ $data->id }}" <?= ($data->is_active =="1" ? 'selected':'')?>>{{$data->name}}</option>
                     @endforeach
                   </select>
                 </div>
-
-              </div>
+            </div>
             </div>
             <div class="col-md-6">
               <div class="form-group row">
@@ -169,11 +168,16 @@
           <div class="row">
             <div class="col-sm-8 mb-3">
               <div class="form-group row mb-0">
+
                 <label class="col-md-2 col-form-label">{{ __('Add') }}&nbsp;&nbsp;<span class="searchItemTh"> {{ __('Item') }} </span></label>
                 <input class="form-control auto col-md-9" placeholder="{{ __('Search') }}" id="search">
                 <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="no_div" tabindex="0">
-                    <li>{{ __('No record found') }} </li>
+                  @foreach($items as $data)
+                    <option value="{{ $data->id }}" <?= ($data->is_active =="1" ? 'selected':'')?>>{{$data->name}}</option>
+                   @endforeach
+                   <li>{{ __('No record found') }} </li>
                 </ul>
+
               </div>
               <div class="row">
                 <div class="col-md-2"></div>

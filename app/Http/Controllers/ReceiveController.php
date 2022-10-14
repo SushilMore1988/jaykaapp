@@ -30,10 +30,10 @@ class ReceiveController extends Controller
         $data['sub_menu'] = 'purchase_receive/list';
         $data['page_title'] = __('Purchases Receive');
         $data['suppliers'] = DB::table('suppliers')->select('id', 'name')->get();
-        $data['from']       = $from = isset($_GET['from']) ? $_GET['from'] : null;        
+        $data['from']       = $from = isset($_GET['from']) ? $_GET['from'] : null;
         $data['to']         = $from = isset($_GET['to']) ? $_GET['to'] : null;
-        $data['supplier']   = $supplier_id = isset($_GET['supplier']) ? $_GET['supplier'] : 'all'; 
-        
+        $data['supplier']   = $supplier_id = isset($_GET['supplier']) ? $_GET['supplier'] : 'all';
+
         $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first()->value;
 
         return $dataTable->with('row_per_page', $row_per_page)->render('admin.receive.receive_list', $data);
@@ -57,14 +57,14 @@ class ReceiveController extends Controller
 
     public function update(Request $request)
     {
-        $order_no = $request->order_no;   
-        $receive_id = $request->id;        
+        $order_no = $request->order_no;
+        $receive_id = $request->id;
         $data['receive_date'] = DbDateFormat($request->receive_date);
         $data['order_receive_no'] = $request->order_receive_no;
 
         try {
-            DB::beginTransaction();   
-            
+            DB::beginTransaction();
+
             DB::table('receive_orders')->where('id', $receive_id)->update($data);
 
             $item_id = $request->item_id;
@@ -76,7 +76,7 @@ class ReceiveController extends Controller
             $delete_item = $request->delete_item;
             if ($delete_item != '') {
 
-                $deleted_po_details_id = explode(",", $delete_item); 
+                $deleted_po_details_id = explode(",", $delete_item);
                 if (count($deleted_po_details_id) > 0 ) {
                  foreach ($deleted_po_details_id as $key => $val) {
                     $receive_data = DB::table('receive_order_details')->where(['po_details_id'=> $val, 'receive_id'=> $receive_id])->first();
@@ -86,7 +86,7 @@ class ReceiveController extends Controller
                     $purch_data = DB::table('purch_order_details')
                                 ->where(['purch_order_id' => $order_no, 'id' => $val])
                                 ->first();
-                    
+
                     DB::table('purch_order_details')
                             ->where(['purch_order_id' => $order_no, 'id' => $val])
                             ->update(['quantity_received'=> $purch_data->quantity_received - $receive_data->quantity]);
@@ -96,7 +96,7 @@ class ReceiveController extends Controller
                  }
               }
             }
-             
+
             // update item
             foreach ($po_details_id as $key => $value) {
                  $itemDetails['quantity'] = $quantity[$key];
@@ -113,19 +113,19 @@ class ReceiveController extends Controller
                  DB::table('purch_order_details')
                         ->where(['purch_order_id' => $order_no, 'id' => $value])
                         ->update(['quantity_received'=> ($old_remain_qty[$key] + $quantity[$key])]);
-            } 
+            }
 
             DB::commit();
         } catch (\Exception $e) {
                 DB::rollBack();
-        }   
+        }
 
         Session::flash('success', __('Saved Successfully'));
         return redirect()->intended('purchase_receive/details/'.$receive_id);
     }
 
     public function updateDate(Request $request)
-    {        
+    {
         $date = DbDateFormat($request->date);
         $receiveData = DB::table('received_orders')
                         ->where('id', $request->id)
@@ -146,14 +146,14 @@ class ReceiveController extends Controller
         $order_no    = $receiveData->purchase_order_id;
         $itemList = ReceivedOrderDetail::where(['received_order_id' => $receive_id])->get();
         try {
-            DB::beginTransaction();  
+            DB::beginTransaction();
             if (!empty($itemList)) {
                 foreach ($itemList as $value) {
                     $orderItemDetails = PurchaseOrderDetail::find($value->purchase_order_detail_id, ['quantity_received']);
                     $receiveQty = ($orderItemDetails->quantity_received - $value->quantity);
                     DB::table('purchase_order_details')
                         ->where(['purchase_order_id' => $order_no, 'id' => $value->purchase_order_detail_id])
-                        ->update(['quantity_received' => $receiveQty]);   
+                        ->update(['quantity_received' => $receiveQty]);
                 }
             }
             DB::table('stock_moves')->where(['transaction_type_id' => $receive_id])->delete();
@@ -164,14 +164,14 @@ class ReceiveController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Session::flash('fail', __('Delete Failed'));
-        }   
+        }
         return redirect()->intended('purchase_receive/list');
     }
 
     public function receiveDetails($id)
     {
         $data['menu'] = 'purchase';
-        $data['sub_menu'] = 'purchase_receive/list';   
+        $data['sub_menu'] = 'purchase_receive/list';
         $data['page_title'] = __('Purchases Receive Details');
 
         $data['receivedData'] = ReceivedOrder::with(['receivedOrderDetails', 'supplier:id,name,email,street,contact,city,state,zipcode,country_id', 'location:id,name', 'purchaseOrder:id,invoice_type'])->find($id);
@@ -181,7 +181,7 @@ class ReceiveController extends Controller
         }
         return view('admin.receive.details', $data);
     }
-    
+
     public function receivePdf($id)
     {
         $data = [];
@@ -190,9 +190,9 @@ class ReceiveController extends Controller
                                                     'receivedOrderDetails:id,received_order_id,item_name,quantity'
                                                 ])->find($id);
         $data['companyInfo']['company'] = Preference::getAll()->where('category', 'company')->pluck('value', 'field')->toArray();
-        return printPDF($data, 'order_received_' . time() . '.pdf', 'admin.receive.pdf', view('admin.receive.pdf', $data), 'pdf', '');            
+        return printPDF($data, 'order_received_' . time() . '.pdf', 'admin.receive.pdf', view('admin.receive.pdf', $data), 'pdf', '');
     }
-    
+
     public function receivePrint($id)
     {
         $data = [];
@@ -201,7 +201,7 @@ class ReceiveController extends Controller
                                                     'receivedOrderDetails:id,received_order_id,item_name,quantity'
                                                 ])->find($id);
         $data['companyInfo']['company'] = Preference::getAll()->where('category', 'company')->pluck('value', 'field')->toArray();
-        return printPDF($data, 'order_received_' . time() . '.pdf', 'admin.receive.pdf', view('admin.receive.pdf', $data), 'print', '');    
+        return printPDF($data, 'order_received_' . time() . '.pdf', 'admin.receive.pdf', view('admin.receive.pdf', $data), 'print', '');
     }
 
     public function allReceive($order_no)
@@ -228,7 +228,7 @@ class ReceiveController extends Controller
             Session::flash("fail", __('Purchaes data not found'));
             return redirect('purchase_receive/list');
         }
-        return view('admin.receive.add', $data); 
+        return view('admin.receive.add', $data);
     }
 
     public function manualStore(Request $request)
@@ -256,7 +256,7 @@ class ReceiveController extends Controller
             $receiveOrder->user_id           = Auth::user()->id;
             $receiveOrder->supplier_id       = $request->supplier_id;
             $receiveOrder->reference         = $request->order_reference;
-            $receiveOrder->location_id       = $request->location;
+            //$receiveOrder->location_id       = $request->location;
             $receiveOrder->order_receive_no  = $request->order_receive_no;
             $receiveOrder->receive_date      = date('Y-m-d', strtotime($request->receive_date));
             $receiveOrder->save();
@@ -277,7 +277,7 @@ class ReceiveController extends Controller
                     $receivedDetail->quantity          = validateNumbers($quantity[$key]);
                     $receivedDetail->purchase_order_detail_id = $value;
                     $receivedDetail->save();
-               
+
                     if ($items[$key] !='') {
                         $stockMove                   = new StockMove();
                         $stockMove->item_id          = $items[$key];
@@ -319,9 +319,9 @@ class ReceiveController extends Controller
         }
         $data['receiveData'] = (new ReceivedOrder)->getAllPurchaseReceiveOrder($from, $to, $supplier)->latest('id')->get();
         if ( !empty($from) && !empty($to) ) {
-            $data['date_range'] =  formatDate($from) . __('To') . formatDate($to);   
+            $data['date_range'] =  formatDate($from) . __('To') . formatDate($to);
         } else {
-            $data['date_range'] = __('No date selected');   
+            $data['date_range'] = __('No date selected');
         }
         return printPDF($data, 'order_receive_list_' . time() . '.pdf', 'admin.receive.receive_list_pdf', view('admin.receive.receive_list_pdf', $data), 'pdf', 'domPdf');
     }
