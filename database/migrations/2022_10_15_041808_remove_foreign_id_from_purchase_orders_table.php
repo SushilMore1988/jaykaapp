@@ -21,6 +21,10 @@ class RemoveForeignIdFromPurchaseOrdersTable extends Migration
                 $table->dropForeign(['location_id']);
                 // $table->dropColumn('pick_detail_id');
         });
+        Schema::table('stock_moves', function (Blueprint $table) {
+                $table->dropForeign(['location_id']);
+                // $table->dropColumn('pick_detail_id');
+        });
     }
 
     /**

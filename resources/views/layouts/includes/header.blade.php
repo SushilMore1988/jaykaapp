@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </li>
-                <li>
+                {{-- <li>
                     <div class="dropdown">
                         <a class="dropdown-toggle flag flag-icon-background flag-icon-{{ getSVGFlag($flag) }}" id="dropdown-flag" href="javascript:" data-toggle="dropdown"></a>
                         <div class="dropdown-menu dropdown-menu-right notification w-200p">
@@ -57,7 +57,7 @@
                             </ul>
                         </div>
                     </div>
-                </li>
+                </li> --}}
                 <li>
                     <div class="dropdown drp-user">
                         <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">

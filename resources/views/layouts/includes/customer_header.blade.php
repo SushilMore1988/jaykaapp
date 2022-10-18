@@ -17,7 +17,7 @@
             </ul>
             <?php $flag = config('app.locale'); ?>
             <ul class="navbar-nav ml-auto">
-                <li> 
+                {{-- <li> 
                     <div class="dropdown" data-flag="
                     {{ getSVGFlag($flag) }}">
                         <a class="dropdown-toggle flag flag-icon-background flag-icon-{{ getSVGFlag($flag) }}" id="dropdown-flag" href="javascript:" data-toggle="dropdown"></a>
@@ -41,7 +41,7 @@
                             </ul>
                         </div>
                     </div>
-                </li>
+                </li> --}}
                 <li>
                     <div class="dropdown drp-user">
                         <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">

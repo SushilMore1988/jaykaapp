@@ -33,33 +33,42 @@
           </div>
           <div class="card-block task-comment p-15">
             <div class="row">
-              @foreach($projectMembers as $data)
-              <a href="{{ url('user/team-member-profile/'.$data->id) }}" class="mb-3">
+              
+              {{-- <a href="{{ url('user/team-member-profile/'.$data->id) }}" class="mb-3">
                 @if (!empty($data->imageIcon) && file_exists(public_path('uploads/user/' . $data->imageIcon)))
                 <img alt=" "  src='{{url("uploads/user/".$data->imageIcon)}}' class="user-img img-radius" data-toggle="tooltip" data-placement="top" title="{{ $data->full_name }}">
                 @else
                 <img alt=" " src='{{url("dist/img/avatar.jpg")}}' class="user-img img-radius" data-toggle="tooltip" data-placement="top" title="{{ $data->full_name }}">
                 @endif
-              </a>
+              </a> --}}
 
                    {{-- table --}}
                     <div class="container mt-5">
                         <table class="table table-bordered yajra-datatable">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>work_type</th>
-                                    <th>budget</th>
+                                    <th>Sr. No.</th>
+                                    <th>Work Type</th>
+                                    <th>Budget</th>
+                                    <th>Remaining</th>
                                     <th>Action</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                              </thead>
+                              <tbody>
+                              @foreach($budget as $data)
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $data->workType->name }}</td>
+                                    <td>{{ $data->budget }}</td>
+                                    <td>{{ $data->getRemainingBudget() }}</td>
+                                    <td>edit/delete</td>
+                                </tr>
+                              @endforeach
                             </tbody>
                         </table>
                     </div>
                  {{-- table --}}
 
-              @endforeach
             </div>
           </div>
         </div>
@@ -110,13 +119,13 @@
 <script src="{{ asset('dist/js/jquery.validate.min.js')}}"></script>
 <script src="{{ asset('datta-able/plugins/select2/js/select2.full.min.js')}}"></script>
 <script src="{{url('dist/js/progress-bar.min.js')}}"></script>
-<script type="text/javascript">
+{{-- <script type="text/javascript">
   'use strict';
   var oldMembers = JSON.parse("{!! $oldMembers !!}");
   var from = "";
   var to = "";
   var projectId = "";
-</script>
+</script> --}}
 <script src="{{ asset('dist/js/custom/project.min.js') }}"></script>
 @endsection
 work_type

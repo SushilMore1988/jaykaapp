@@ -28,4 +28,9 @@ class WorkType extends Model
     {
         return $this->children()->with('allChildren');
     }
+
+    public function getTotalPurchasedAmount($projectId)
+    {
+        return PurchaseOrder::with('receivedOrders')->where('work_type_id', $this->attributes['id'])->where('project_id', $projectId)->sum('total');
+    }
 }

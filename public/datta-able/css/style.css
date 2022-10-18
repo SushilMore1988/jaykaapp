@@ -2847,7 +2847,8 @@ p.text-muted {
 }
 
 .pcoded-navbar .pcoded-menu-caption {
-    color: #e8edf7;
+    /* color: #e8edf7; */
+    color: #a9b7d0;
 }
 
 .pcoded-navbar .pcoded-inner-navbar li.active>a,

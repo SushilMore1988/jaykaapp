@@ -2,8 +2,8 @@
     <div class="navbar-wrapper">
         <div class="navbar-brand header-logo">
             <a href="{{ url('dashboard') }}" class="b-brand">
-
-                <span class="b-title" title="{{ $company_name }}">{{ $company_name }}</span>
+                <img src="{{url("uploads/companyPic/b3db55f43ae4c3b1abc444e5adaa563c_1_jayka_logopng.png")}}" class="" style="width:80px;" />
+                {{-- <span class="b-title" title="{{ $company_name }}">{{ $company_name }}</span> --}}
             </a>
             <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
         </div>
