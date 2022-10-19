@@ -37,6 +37,7 @@ class TaskStatusesTableSeeder extends Seeder
             array (
                 'id' => 3,
                 'name' => 'Testing',
+                // 'name' => 'Review',
                 'status_order' => 4,
                 'color' => '#5a4d4d',
             ),

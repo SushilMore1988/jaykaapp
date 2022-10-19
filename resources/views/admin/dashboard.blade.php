@@ -240,7 +240,7 @@
                       <div class="col-sm-3">
                         <div class="row align-items-center">
                           <div class="col-8">
-                            <h6 class="m-0">{{ __('Testing') }}</h6>
+                            <h6 class="m-0">{{ __('Review') }}</h6>
                           </div>
                           <div class="mt-2 text-right col-4">
                             <a href="{{url('task/list?from=&to=&project=&assignee=&status=3&priority=&btn=')}}"><h4 class="text-c-green f-w-400">{{ isset($taskStat["Testing"]) ? $taskStat["Testing"] : 0 }}</h4></a>
