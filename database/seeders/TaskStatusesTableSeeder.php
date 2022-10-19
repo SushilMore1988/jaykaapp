@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TaskStatusesTableSeeder extends Seeder
 {
@@ -16,9 +17,9 @@ class TaskStatusesTableSeeder extends Seeder
     {
         
 
-        \DB::table('task_statuses')->delete();
+        DB::table('task_statuses')->delete();
         
-        \DB::table('task_statuses')->insert(array (
+        DB::table('task_statuses')->insert(array (
             0 => 
             array (
                 'id' => 1,
@@ -36,8 +37,8 @@ class TaskStatusesTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'name' => 'Testing',
-                // 'name' => 'Review',
+                // 'name' => 'Testing',
+                'name' => 'Review',
                 'status_order' => 4,
                 'color' => '#5a4d4d',
             ),

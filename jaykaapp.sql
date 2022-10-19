@@ -2716,7 +2716,7 @@ CREATE TABLE `task_statuses` (
 INSERT INTO `task_statuses` (`id`, `name`, `status_order`, `color`) VALUES
 (1, 'Not Started', 1, '#F22012'),
 (2, 'In Progress', 3, '#04a9f5'),
-(3, 'Testing', 4, '#5a4d4d'),
+(3, 'Review', 4, '#5a4d4d'),
 (4, 'Complete', 6, '#00b894'),
 (5, 'On Hold', 2, '#fdcb6e'),
 (6, 'Re-open', 7, '#F22012');

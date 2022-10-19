@@ -38,11 +38,11 @@ use App\Exports\allPurchaseExport;
 use Illuminate\Http\Request;
 use App\Rules\CheckValidEmail;
 use Validator;
-use Auth;
-use DB;
-use Excel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
-use Session;
 
 class PurchaseController extends Controller
 {
@@ -136,9 +136,9 @@ class PurchaseController extends Controller
         $data['custom_tax_type'] = $selectStartCustom . $taxOptions . $selectEndCustom . $taxHiddenField;
         $data['tax_type_custom'] = $selectStartCustom . $taxOptions . $selectEndCustom;
         $preference              = Preference::getAll()->pluck('value', 'field')->toArray();
-        $data['projects']=Project::all();
-        $data['items']=Item::all();
-        $data['workTypes']=WorkType::all();
+        $data['projects']        = Project::all();
+        $data['items']           = Item::all();
+        $data['workTypes']       = WorkType::where('parent_id', '!=', NULL)->get();
         $data['exchange_rate_decimal_digits'] = $preference['exchange_rate_decimal_digits'];
         $data['default_currency']= $data['currencies']->where('id', $preference['dflt_currency_id'])->first();
         return view('admin.purchase.add', $data);
@@ -408,7 +408,7 @@ class PurchaseController extends Controller
                                                                 'currency:id,name,symbol'])
                                                         ->find($id);
         if (empty($data['purchaseData'])) {
-            \Session::flash('fail', __('The data you are trying to access is not found.'));
+            Session::flash('fail', __('The data you are trying to access is not found.'));
             return redirect()->back();
         }
         foreach ($data['purchaseData']->purchaseOrderDetails as $key => $value) {
@@ -776,7 +776,7 @@ class PurchaseController extends Controller
                 }
                 DB::commit();
                 (new File)->deleteFiles('Purchase Order', $id, [], 'uploads/purchase_order');
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollBack();
             }
             return redirect()->intended("purchase/list");
@@ -930,7 +930,7 @@ class PurchaseController extends Controller
                 Session::flash('fail', __('Purchase Copy Failed'));
                 return redirect()->back();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             Session::flash('fail', __('Purchase Copy Failed'));
             return redirect()->back();
@@ -1037,18 +1037,18 @@ class PurchaseController extends Controller
             $emailResponse = $this->email->sendEmailWithAttachment($request['email'], $request['subject'], $request['message'], $orderName, $companyName);
 
             if ($emailResponse['status'] == false) {
-                \Session::flash('fail', __($emailResponse['message']));
+                Session::flash('fail', __($emailResponse['message']));
              }
 
         } else {
             $emailResponse = $this->email->sendEmail($request['email'], $request['subject'], $request['message'], null, $companyName);
 
             if ($emailResponse['status'] == false) {
-                \Session::flash('fail', __($emailResponse['message']));
+                Session::flash('fail', __($emailResponse['message']));
              }
         }
         if ($emailResponse['status'] == true) {
-            \Session::flash('success', __('Email has been sent successfully.'));
+            Session::flash('success', __('Email has been sent successfully.'));
          }
 
         return redirect()->intended('purchase/view-purchase-details/' . $orderNo);

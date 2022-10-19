@@ -88,7 +88,7 @@
                   <div class="form-group row" id="total_cost_div">
                     <label class="col-sm-2 control-label require">{{ __('Total Budget')  }}</label>
                     <div class="col-sm-8">
-                      <input type="text" name="total_budget" id="total_cost" class="form-control positive-float-number" placeholder="{{ __('Please enter total project Budget') }}">
+                      <input type="text" name="total_cost" id="total_cost" class="form-control positive-float-number" placeholder="{{ __('Please enter total project Budget') }}">
                     </div>
                   </div>
                   <div class="form-group row" id="rate_per_hour_div">

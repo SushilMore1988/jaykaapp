@@ -22,17 +22,15 @@ use App\Models\TagAssign;
 use App\Models\Tag;
 use App\Models\WorkType;
 use App\Models\Budget;
-use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Cache;
-use PDF;
-use Validator;
-use Carbon;
+use Illuminate\Support\Facades\Cache;
 use App\Exports\TimesheetExport;
-
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProjectController extends Controller
 {
@@ -106,12 +104,11 @@ class ProjectController extends Controller
           $data['due_date']               = $request->end_date ? DbDateFormat($request->end_date) : NULL ;
           $data['improvement']            = 0;
           $data['improvement_from_task']  = 0;
-          $data['cost']                   = $request->charge_type == 1 ? validateNumbers($request->total_cost) : 0;
+          $data['cost']                   = validateNumbers($request->total_cost);
           $data['per_hour_project_scale'] = validateNumbers($request->rate_per_hour);
           $data['estimated_hours']        = validateNumbers($request->project_hours);
 
           $insertId                       = DB::table('projects')->insertGetId($data);
-
           //Insert Activity
           $projectCreator = User::select('full_name')->where(['id' => $user_id])->first();
           (new Activity)->store('Project', $insertId, 'user', Auth::user()->id, __('A new project has been created by') . ' ' . '<strong>' . htmlentities($projectCreator->full_name) .'</strong>');
@@ -186,19 +183,19 @@ class ProjectController extends Controller
           ini_set('max_execution_time', 600);
           $emailResponseAssigne = $this->mailToAssigne($projectDetails, $oldMembers = array());
           if ($emailResponseAssigne['status'] == false) {
-            \Session::flash('fail', __($emailResponseAssigne['message']));
+            Session::flash('fail', __($emailResponseAssigne['message']));
            }
           if ($request->checkbox) {
             if ($request->project_type == 'customer') {
               $emailResponse = $this->mailToCustomer($projectDetails, $request->customer_id);
               if ($emailResponse['status'] == false) {
-                \Session::flash('fail', __($emailResponse['message']));
+                Session::flash('fail', __($emailResponse['message']));
              }
             }
           }
 
           DB::commit();
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       DB::rollBack();
       return redirect('project/details/'.$insertId)->withErrors(__('Failed To Add The Project'));
     }
@@ -233,7 +230,7 @@ class ProjectController extends Controller
         ->leftJoin('project_statuses as ps','ps.id','=', 'projects.project_status_id')
         ->first();
     if (empty($data['project'])) {
-      \Session::flash('fail', __('The data you are trying to access is not found.'));
+      Session::flash('fail', __('The data you are trying to access is not found.'));
       return redirect()->back();
     }
     $data['projectMember'] = DB::table('project_members')
@@ -267,7 +264,7 @@ class ProjectController extends Controller
     if ($validator->fails()) {
       return redirect()->back()->withErrors($validator)->withInput();
     }
-    \DB::beginTransaction();
+    DB::beginTransaction();
     $projectMembers                 = $request->members;
     $newTag                         = $request->tags;
     $project_id                     = $request->project_id;
@@ -284,7 +281,7 @@ class ProjectController extends Controller
     $data['improvement']            = 0;
 
     $data['improvement_from_task']  = 0;
-    $data['cost']                   = $request->charge_type == 1 ? validateNumbers($request->total_cost) : 0;
+    $data['cost']                   = validateNumbers($request->total_cost);
     $data['per_hour_project_scale'] = validateNumbers($request->rate_per_hour);
     $data['estimated_hours']        = validateNumbers($request->project_hours);
 
@@ -487,13 +484,13 @@ class ProjectController extends Controller
         if ($request->previous_customer_id != $request->customer_id) {
           $emailResponse = $this->mailToCustomer($projectDetails, $request->customer_id);
           if ($emailResponse['status'] == false) {
-            \Session::flash('fail', __($emailResponse['message']));
+            Session::flash('fail', __($emailResponse['message']));
            }
         }
       }
-      \DB::commit();
+      DB::commit();
       Cache::forget('gb-projects');
-     \Session::flash('success', __('Successfully updated'));
+     Session::flash('success', __('Successfully updated'));
     return redirect()->intended('project/details/'.$project_id);
   }
 
@@ -506,7 +503,7 @@ class ProjectController extends Controller
         Project::where('id', $project_id)->update(['project_status_id' => 6]);
         Cache::forget('gb-projects');
         DB::commit();
-        \Session::flash('success', __('Deleted Successfully.'));
+        Session::flash('success', __('Deleted Successfully.'));
         return redirect()->back();
       }
     } catch (\Exception $e) {
@@ -549,7 +546,7 @@ class ProjectController extends Controller
         ->leftJoin('project_statuses as ps','ps.id','=','projects.project_status_id')
         ->first();
       if (empty($data['project'])) {
-        \Session::flash('fail', __('The data you are trying to access is not found.'));
+        Session::flash('fail', __('The data you are trying to access is not found.'));
         return redirect()->back();
       }
       if ($data['project']->due_date == null) {
@@ -638,7 +635,7 @@ class ProjectController extends Controller
         ->leftJoin('project_statuses as ps','ps.id','=','projects.project_status_id')
         ->first();
       if (empty($data['project'])) {
-        \Session::flash('fail', __('The data you are trying to access is not found.'));
+        Session::flash('fail', __('The data you are trying to access is not found.'));
         return redirect()->back();
       }
       // $data['budget'] = DB::table('budgets')
@@ -695,7 +692,7 @@ class ProjectController extends Controller
       //   }
       // }
       // $data['allCurrency'] = array_diff($allCurrency, $overdueCurrency);
-      $data['workTypes'] = WorkType::all();
+      $data['workTypes'] = WorkType::where('parent_id', '!=', NULL)->get();
       return view('admin.project.budget', $data);
   }
 
@@ -778,7 +775,7 @@ class ProjectController extends Controller
         //Insert Activity
         (new Activity)->store('Project', $project_id, 'user', Auth::user()->id, __('All team member from project has been removed.'));
       }
-      \Session::flash('success', __('Successfully updated'));
+      Session::flash('success', __('Successfully updated'));
       return redirect()->back();
   }
 
@@ -896,7 +893,7 @@ class ProjectController extends Controller
           $message = str_replace('{assignee}', $assigne->full_name, $message);
           $response = $this->email->sendEmail($assigne->email, $subject, $message, null, $preference['company_name']);
           if ($response['status'] == false) {
-            \Session::flash('fail', __($response['message']));
+            Session::flash('fail', __($response['message']));
           }
         }
       }
@@ -926,7 +923,7 @@ class ProjectController extends Controller
                         ->select('projects.id', 'projects.name', 'ps.name as status_name', 'projects.charge_type')
                         ->where('projects.id', $id)->first();
     if (empty($data['project'])) {
-      \Session::flash('fail', __('The data you are trying to access is not found.'));
+      Session::flash('fail', __('The data you are trying to access is not found.'));
       return redirect()->back();
     }
     $data['milestones'] = Milestone::where('project_id', $id)->get();
@@ -1115,7 +1112,7 @@ class ProjectController extends Controller
   public function taskEdit($id)
   {
     if (!isset($_GET['task_id']) || empty($_GET['task_id'])) {
-      \Session::flash('fail', __('The data you are trying to access is not found.'));
+      Session::flash('fail', __('The data you are trying to access is not found.'));
       return redirect()->back();
     }
     $data = ['menu' => 'project', 'header' => 'project', 'navbar' => 'task', 'page_title' => __('Project Edit Task')];
@@ -1129,7 +1126,7 @@ class ProjectController extends Controller
     $data['task_statuses'] = DB::table('task_statuses')->select('id', 'name')->get();
     $data['task'] = $task = $this->task->getTaskDetailsById($_GET['task_id']);
     if (empty($task)) {
-      \Session::flash('fail', __('The data you are trying to access is not found.'));
+      Session::flash('fail', __('The data you are trying to access is not found.'));
       return redirect()->back();
     }
     $projectMembers = DB::table('project_members')->where(['project_id'=>$data['task']->project_id])->pluck('user_id')->toArray();
@@ -1281,7 +1278,7 @@ class ProjectController extends Controller
         DB::table('task_assigns')->where(['task_id' => $request->task_id])->delete();
     }
 
-    \Session::flash('success', __('Successfully updated'));
+    Session::flash('success', __('Successfully updated'));
     return redirect()->intended('project/tasks/' . $request->project_id);
   }
 

@@ -1,18 +1,14 @@
 <?php
 namespace App\DataTables;
+
+use App\Http\Start\Helpers;
 use Yajra\DataTables\Services\DataTable;
 use App\Models\{
     Task,
     Project,
-    Priority,
     TaskStatus
 };
-use Auth;
-use DB;
-use Session;
-use Helpers;
-use Cache;
-
+use Illuminate\Support\Facades\Auth;
 
 class AllTaskDataTable extends DataTable
 {
