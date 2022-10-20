@@ -344,7 +344,7 @@
                             @endif
                           </td>
                           <td align="center">{{formatDate($result->transaction_date)}}</td>
-                          <td align="center">{{$result->location->name}}</td>
+                          <td align="center">{{$result->location?->name}}</td>
                           <td align="center">
                             @if($result->quantity >0 )
                               {{formatCurrencyAmount($result->quantity)}}

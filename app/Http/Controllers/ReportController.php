@@ -342,8 +342,10 @@ class ReportController extends Controller
         if (!empty($incomeList)) {
             foreach ($incomeList as $key => $value) {
                 foreach ($months as $k => $month) {
-                    $results[$key][$month] = !empty($value[$month]) ? $value[$month] : 0;
-                    $total[$key] += !empty($value[$month]) ? $value[$month] : 0;
+                    if(isset($value[$month])){
+                        $results[$key][$month] = !empty($value[$month]) ? $value[$month] : 0;
+                        $total[$key] += !empty($value[$month]) ? $value[$month] : 0;
+                    }
                 }
             }
         }

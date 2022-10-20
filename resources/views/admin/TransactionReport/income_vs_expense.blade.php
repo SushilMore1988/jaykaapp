@@ -76,11 +76,13 @@
               <tr>
                 <tr>
                   <td class="text-center">{{ __('Total Income') }}</td>
-                  <td class="text-center">{{ $currencySymbol }}<span id="totalIncome"></span></td>
+                  {{-- <td class="text-center">{{ $currencySymbol }}<span id="totalIncome"></span></td> --}}
+                  <td class="text-center">{{ $currency_sign }}<span id="totalIncome"></span></td>
                 </tr>
                 <tr>
                   <td class="text-center">{{ __('Total Expense') }}</td>
-                  <td class="text-center">{{ $currencySymbol }}<span id="totalExpense"></span></td>
+                  <td class="text-center">{{ $currency_sign }}<span id="totalExpense"></span></td>
+                  {{-- <td class="text-center">{{ $currencySymbol }}<span id="totalExpense"></span></td> --}}
                 </tr>
               </tr>
             </tbody>
@@ -129,16 +131,20 @@
                 <tr>
                   <td class="text-center">{{ __('Expense') }}</td>
                   @foreach($months as $key => $month)
+                  @if(isset($expenseArray[$month]))
                     <?php $totalExpense += $expenseArray[$month]; ?>
                     <th class="text-center">{{ formatCurrencyAmount($expenseArray[$month]) }}</th>
+                  @endif
                   @endforeach
                   <input type="hidden" id="expense" value="{{formatCurrencyAmount($totalExpense)}}">
                 </tr>
                 <tr>
                   <th class="text-center">{{ __('Revenue') }}</th>
                   @foreach($months as $key => $month)
+                  @if(isset($revenueArray[$month]))
                     <?php $totalRevenue += $revenueArray[$month]; ?>
                     <th class="text-center">{{$currency_sign}}{{ formatCurrencyAmount($revenueArray[$month]) }}</th>
+                  @endif
                   @endforeach
                   <input type="hidden" id="revenue" value="{{formatCurrencyAmount($totalRevenue)}}">
                 </tr>

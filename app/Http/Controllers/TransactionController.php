@@ -232,7 +232,9 @@ class TransactionController extends Controller
         }
 
         foreach ($months as $key => $month) {
-            $revenueArray[$month] = $totalIncomeArray[$month] - $totalExpenseArray[$month];
+            if(isset($revenueArray[$month]) && isset($totalIncomeArray[$month]) && isset($totalExpenseArray[$month])){
+                $revenueArray[$month] = $totalIncomeArray[$month] - $totalExpenseArray[$month];
+            }
         }
         $data['from']          = date('F-Y', strtotime($from));
         $data['to']            = date('F-Y', strtotime($to));
