@@ -19,7 +19,7 @@
     <input class="form-control" id="startfrom" type="hidden" name="from" value="<?= isset($from) ? $from : '' ?>">
     <input class="form-control" id="endto" type="hidden" name="to" value="<?= isset($to) ? $to : '' ?>">
       <div class="col-md-12 col-sm-12 col-xs-12 pl-4">
-      @php 
+      @php
         use App\Model\Location;
       @endphp
         <div class="row mt-3">
@@ -34,22 +34,37 @@
               </button>
             </div>
           </div>
-          <div class="ticket-filter col-xl-3 col-md-3 col-sm-3 col-xs-12 mb-2">
+          {{-- <div class="ticket-filter col-xl-3 col-md-3 col-sm-3 col-xs-12 mb-2">
             <select class="form-control select2" name="source" id="source">
               <option value="">{{ __('All Source') }}</option>
-              @if(!empty($sourceList))
-                @foreach($sourceList as $location)
-                  <option value="{{$location->id}}" <?= ($location->id == $source) ? 'selected' : ''?>>{{$location->name}}</option>
+              @if(!empty($locationList))
+                @foreach($locationList as $location)
+                  <option value="{{$location->id}}">>{{$location->name}}</option>
+                @endforeach
+              @endif
+            </select>
+          </div> --}}
+         <div class="ticket-filter col-xl-3 col-md-3 col-sm-3 col-xs-12 mb-2">
+            <select class="form-control select2" name="source" id="source">
+              <option value="">{{ __('All project') }}</option>
+              @if(!empty($projects))
+                @foreach($projects as $project)
+                  <option value="{{$project->id}}">{{$project->name}}</option>
                 @endforeach
               @endif
             </select>
           </div>
-          
-          <div class="ticket-filter col-xl-3 col-md-2 col-sm-2 col-xs-12 mb-2">
+
+
+
+
+
+
+        <div class="ticket-filter col-xl-3 col-md-2 col-sm-2 col-xs-12 mb-2">
             <select class="form-control select2" name="destination" id="destination">
               <option value="">{{ __('All Destination') }}</option>
               @if( (! empty($destination) && $destination != 'all') || (! empty($source) && $source != 'all') )
-                @foreach($destinationList as $location)
+                @foreach($locationList as $location)
                   <option value="{{$location->id}}" <?= ($location->id == $destination) ? 'selected' : ''?>>{{$location->name}}</option>
                 @endforeach
               @else
