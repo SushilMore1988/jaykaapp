@@ -24,6 +24,11 @@ class WorkType extends Model
         return $this->hasMany(Test::class, $this->parentColumn);
     }
 
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
     public function allChildren()
     {
         return $this->children()->with('allChildren');

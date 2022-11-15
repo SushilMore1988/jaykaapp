@@ -18,6 +18,11 @@ class StockMove extends Model
   		return $this->belongsTo("App\Models\Location");
   	}
 
+  	public function project()
+  	{
+  		return $this->belongsTo("App\Models\Project");
+  	}
+
   	public function saleOrder()
   	{
   		return $this->belongsTo("App\Models\SaleOrder", 'transaction_type_id');
@@ -26,6 +31,15 @@ class StockMove extends Model
 	public function getItemQtyByLocationName($location_id, $item_id)
 	{
 		$qty = $this->where(['location_id' => $location_id, 'item_id' => $item_id])->sum('quantity');
+	    if (empty($qty)) {
+	        $qty = 0;
+	    }
+	    return $qty;
+	}
+
+	public function getItemQtyByProjectName($project_id, $item_id)
+	{
+		$qty = $this->where(['project_id' => $project_id, 'item_id' => $item_id])->sum('quantity');
 	    if (empty($qty)) {
 	        $qty = 0;
 	    }

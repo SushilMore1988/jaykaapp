@@ -35,11 +35,13 @@ class StockTransferListDataTable extends DataTable
         })
 
        ->addColumn('source', function ($stockTransfer) {
-            return isset( $stockTransfer->sourceLocation->name ) ? $stockTransfer->sourceLocation->name : "" ;
+            return isset( $stockTransfer->sourceProject->name ) ? $stockTransfer->sourceProject->name : "" ;
+            // return isset( $stockTransfer->sourceLocation->name ) ? $stockTransfer->sourceLocation->name : "" ;
         }) 
 
        ->addColumn('destination', function ($stockTransfer) {
-            return isset( $stockTransfer->destinationLocation->name ) ? $stockTransfer->destinationLocation->name : "";
+            return isset( $stockTransfer->destinationProject->name ) ? $stockTransfer->destinationProject->name : "";
+            // return isset( $stockTransfer->destinationLocation->name ) ? $stockTransfer->destinationLocation->name : "";
         })
 
        ->addColumn('qty', function ($stockTransfer) {
@@ -61,7 +63,8 @@ class StockTransferListDataTable extends DataTable
         $from        = isset($_GET['from']) ? $_GET['from'] : null;
         $to          = isset($_GET['to']) ? $_GET['to'] : null;
         
-        $stockTransfer   = StockTransfer::select('stock_transfers.id as sto_id', 'stock_transfers.source_location_id', 'stock_transfers.destination_location_id', 'stock_transfers.transfer_date', 'stock_transfers.quantity')->with(['sourceLocation:id,name', 'destinationLocation:id,name']);
+        $stockTransfer   = StockTransfer::select('stock_transfers.id as sto_id', 'stock_transfers.source_project_id', 'stock_transfers.destination_project_id', 'stock_transfers.transfer_date', 'stock_transfers.quantity')->with(['sourceProject:id,name', 'destinationProject:id,name']);
+        // $stockTransfer   = StockTransfer::select('stock_transfers.id as sto_id', 'stock_transfers.source_location_id', 'stock_transfers.destination_location_id', 'stock_transfers.transfer_date', 'stock_transfers.quantity')->with(['sourceLocation:id,name', 'destinationLocation:id,name']);
         if ($from) {
              $stockTransfer->where('transfer_date', '>=', DbDateFormat($from));             
         }
@@ -69,10 +72,12 @@ class StockTransferListDataTable extends DataTable
              $stockTransfer->where('transfer_date', '<=', DbDateFormat($to));             
         }
         if ($source) {
-            $stockTransfer->where('source_location_id', '=', $source);
+            $stockTransfer->where('source_project_id', '=', $source);
+            // $stockTransfer->where('source_location_id', '=', $source);
         }
         if ($destination) {
-            $stockTransfer->where('destination_location_id', '=', $destination);
+            $stockTransfer->where('destination_project_id', '=', $destination);
+            // $stockTransfer->where('destination_location_id', '=', $destination);
         }
 
         if (Helpers::has_permission(Auth::user()->id, 'own_stock_transfer') && !Helpers::has_permission(Auth::user()->id, 'manage_stock_transfer')) {
@@ -88,13 +93,13 @@ class StockTransferListDataTable extends DataTable
 
         ->addColumn(['data' => 'id', 'name' => 'stock_transfers.id', 'title' => __('S/N')])
 
-        ->addColumn(['data' => 'source', 'name' => 'stock_transfers.source_location_id', 'title' => __('Source')])   
+        ->addColumn(['data' => 'source', 'name' => 'stock_transfers.source_project_id', 'title' => __('Source')])   
 
-        ->addColumn(['data' => 'destination', 'name' => 'destinationLocation.name', 'visible' => false, 'orderable' => false])
+        ->addColumn(['data' => 'destination', 'name' => 'destinationProject.name', 'visible' => false, 'orderable' => false])
 
-        ->addColumn(['data' => 'source', 'name' => 'sourceLocation.name', 'visible' => false, 'orderable' => false])
+        ->addColumn(['data' => 'source', 'name' => 'sourceProject.name', 'visible' => false, 'orderable' => false])
 
-        ->addColumn(['data' => 'destination', 'name' => 'stock_transfers.destination_location_id', 'title' => __('Destination')])
+        ->addColumn(['data' => 'destination', 'name' => 'stock_transfers.destination_project_id', 'title' => __('Destination')])
 
         ->addColumn(['data' => 'qty', 'name' => 'stock_transfers.quantity', 'title' => __('Quantity')])
 

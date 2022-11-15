@@ -12,8 +12,10 @@
   <form action="{{url('stock_transfer/update')}}" method="POST" id="transferForm">
     <input type="hidden" value="{{csrf_token()}}" name="_token" id="token">
     <input type="hidden" value="{{$stock_transfer_id}}" name="transfer_id" id="transfer_id">
-    <input type="hidden" value="{{$Info->source_location_id}}" name="trans_source">
-    <input type="hidden" value="{{$Info->destination_location_id}}" name="trans_destination">
+    <input type="hidden" value="{{$Info->source_project_id}}" name="trans_source">
+    <input type="hidden" value="{{$Info->destination_project_id}}" name="trans_destination">
+    {{-- <input type="hidden" value="{{$Info->source_location_id}}" name="trans_source">
+    <input type="hidden" value="{{$Info->destination_location_id}}" name="trans_destination"> --}}
     <div class="card">
       <div class="card-header">
         <h5> <a href="{{url('stock_transfer/list')}}">{{ __('Transfer') }}</a> >> {{ __('Edit Transfer') }}>> #{{ sprintf("%04d", $stock_transfer_id) }}</h5>
@@ -40,22 +42,32 @@
               <div class="col-md-4">
                 <label class="control-label require">{{ __('Source') }}</label>
                 <select class="js-example-basic-single form-control" readonly="true" name="source" id="source">
-                  @foreach($locationList as $data)
+                  @foreach($projectList as $data)
                     @if($data->id==$Info->source_location_id)
                       <option value="{{$data->id}}" {{($data->id == $Info->source_location_id ) ? 'selected' : ''}}>{{ $Info->sourceLocation->name }}</option>
                     @endif
                   @endforeach
+                  {{-- @foreach($locationList as $data)
+                    @if($data->id==$Info->source_location_id)
+                      <option value="{{$data->id}}" {{($data->id == $Info->source_location_id ) ? 'selected' : ''}}>{{ $Info->sourceLocation->name }}</option>
+                    @endif
+                  @endforeach --}}
                 </select>
                 <label id="source-error" class="error" for="source"></label>
               </div>
               <div class="col-md-4">
                 <label class="control-label require">{{ __('Destination') }}</label>
                 <select class="js-example-basic-single form-control" readonly="true" name="destination" id="destination">
-                  @foreach($locationList as $data)
+                  @foreach($projectList as $data)
                     @if($data->id==$Info->destination_location_id)
                       <option value="{{$data->id}}" {{( $data->id == $Info->destination_location_id ) ? 'selected' : '' }}>{{ $Info->destinationLocation->name }}</option>
                     @endif
                   @endforeach
+                  {{-- @foreach($locationList as $data)
+                    @if($data->id==$Info->destination_location_id)
+                      <option value="{{$data->id}}" {{( $data->id == $Info->destination_location_id ) ? 'selected' : '' }}>{{ $Info->destinationLocation->name }}</option>
+                    @endif
+                  @endforeach --}}
                 </select>
                 <label id="destination-error" class="error" for="destination"></label>
               </div>
@@ -139,7 +151,7 @@
               <textarea placeholder="{{ __('Description') }} ..." rows="3" value="{{$Info->note}}" class="form-control" name="comments">{{$Info->note}}</textarea>
             </div>
             <div class="col-md-8 px-0">
-              @if($Info->sourceLocation->is_active == 1 && $Info->destinationLocation->is_active == 1)
+              @if($Info->sourceProject->project_status_id != 0 && $Info->destinationProject->project_status_id != 0)
               <button class="btn btn-primary custom-btn-small" type="submit" id="btnSubmit">{{ __('Update') }}</button>
               @endif
               <a href="{{URL::to('/')}}/stock_transfer/list" class="btn btn-danger custom-btn-small">{{ __('Cancel') }}</a>

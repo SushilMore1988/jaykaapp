@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\StockMove;
 use App\Models\StockTransfer;
 use App\Models\Item;
+use App\Models\ProjectStatus;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -43,16 +44,37 @@ class StockTransferController extends Controller
         $data['source'] = $source = isset($_GET['source']) ? $_GET['source'] : 'all';
         $data['destination'] = $destination = isset($_GET['destination']) ? $_GET['destination'] : 'all';
         $stockTransfer = DB::table('stock_transfers')->get();
-
-        $data['sourceList'] = Location::getAll();
+        $projectStatus = ProjectStatus::where('name', 'In Progress')->first();
+        $data['sourceList'] = Project::getAll();
         $data['projects'] = Project::getAll();
         $data['selectedID'] = 1;
-        $data['destinationList'] = Location::getAll()->where('is_active', '=', 1)->where('id', '!=', $source);
+        $data['destinationList'] = Project::getAll()->where('project_status_id', $projectStatus->id)->where('id', '!=', $source);
         $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first()->value;
-
 
         return $dataTable->with('row_per_page', $row_per_page)->render('admin.stockTransfer.list',$data);
     }
+    // public function index(StockTransferListDataTable $dataTable)
+    // {
+    //     $data = ['menu' => 'purchase'];
+    //     $data['sub_menu'] = 'stock_transfer';
+    //     $data['page_title'] = __('Stock Transfers');
+
+    //     $data['from'] = isset($_GET['from']) ? $_GET['from']:null;
+    //     $data['to'] = isset($_GET['to']) ? $_GET['to']:null;
+
+    //     $data['source'] = $source = isset($_GET['source']) ? $_GET['source'] : 'all';
+    //     $data['destination'] = $destination = isset($_GET['destination']) ? $_GET['destination'] : 'all';
+    //     $stockTransfer = DB::table('stock_transfers')->get();
+
+    //     $data['sourceList'] = Location::getAll();
+    //     $data['projects'] = Project::getAll();
+    //     $data['selectedID'] = 1;
+    //     $data['destinationList'] = Location::getAll()->where('is_active', '=', 1)->where('id', '!=', $source);
+    //     $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first()->value;
+
+
+    //     return $dataTable->with('row_per_page', $row_per_page)->render('admin.stockTransfer.list',$data);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -65,6 +87,7 @@ class StockTransferController extends Controller
         $data['sub_menu'] = 'stock_transfer';
         $data['page_title'] = __('Create Stock Transfers');
         $data['locationList'] = Location::getAll()->where('is_active', 1);
+        $data['projectList'] = Project::getAll();
 
 
         return view('admin.stockTransfer.add', $data);
@@ -93,6 +116,7 @@ class StockTransferController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         $validator->setAttributeNames($fieldNames);
+        
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
@@ -110,8 +134,8 @@ class StockTransferController extends Controller
 
         try {
                 DB::beginTransaction();
-                $transferInfo['source_location_id'] = $request->source;
-                $transferInfo['destination_location_id'] = $request->destination;
+                $transferInfo['source_project_id'] = $request->source;
+                $transferInfo['destination_project_id'] = $request->destination;
                 $transferInfo['user_id'] = $userId;
                 $transferInfo['transfer_date'] = $transfer_date;
                 $transferInfo['note'] = stripBeforeSave($request->comments);
@@ -124,7 +148,7 @@ class StockTransferController extends Controller
                    $stockIn[$key]['item_id'] = $item_id;
                    $stockIn[$key]['transaction_type_id'] = $transfer_id;
                    $stockIn[$key]['transaction_type'] = 'STOCKMOVEIN';
-                   $stockIn[$key]['location_id'] = $request->destination;
+                   $stockIn[$key]['project_id'] = $request->destination;
                    $stockIn[$key]['transaction_date'] = $transfer_date;
                    $stockIn[$key]['user_id'] = $userId;
                    $stockIn[$key]['reference'] = 'moved_from_'.$request->source;
@@ -135,7 +159,7 @@ class StockTransferController extends Controller
                    $stockOut[$key]['item_id'] = $item_id;
                    $stockOut[$key]['transaction_type_id'] = $transfer_id;
                    $stockOut[$key]['transaction_type'] = 'STOCKMOVEOUT';
-                   $stockOut[$key]['location_id'] = $request->source;
+                   $stockOut[$key]['project_id'] = $request->source;
                    $stockOut[$key]['transaction_date'] = $transfer_date;
                    $stockOut[$key]['user_id'] = $userId;
                    $stockOut[$key]['reference'] = 'moved_in_'.$request->destination;
@@ -158,25 +182,128 @@ class StockTransferController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
+    // public function store(Request $request)
+    // {
+    //     $userId = \Auth::user()->id;
+    //     $rules = array(
+    //         'source' => 'required',
+    //         'destination' => 'required',
+    //         'transfer_date' => 'required',
+    //         'id' => new ValidateNewItemTransfer,
+    //         'quantity' => new CheckQuantity,
+    //     );
+    //     $fieldNames = array(
+    //         'source' => 'Source is required',
+    //         'destination' => 'Destination is required',
+    //         'transfer_date' => 'Transfer date is required',
+    //         'id' => 'New_item_avalilable',
+    //         'quantity' => 'checkQuantity',
+    //     );
+
+    //     $validator = Validator::make($request->all(), $rules);
+    //     $validator->setAttributeNames($fieldNames);
+    //     if ($validator->fails()) {
+    //         return back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $itemQuantity = $request->quantity;
+    //     $itemIds = $request->id;
+    //     $stockIds = $request->stock;
+    //     $description = $request->description;
+    //     $transfer_date = DbDateFormat($request->transfer_date);
+    //     $total = 0;
+
+    //     foreach ($itemQuantity as $index => $qty) {
+    //         $total += validateNumbers($qty);
+    //     }
+
+    //     try {
+    //             DB::beginTransaction();
+    //             $transferInfo['source_location_id'] = $request->source;
+    //             $transferInfo['destination_location_id'] = $request->destination;
+    //             $transferInfo['user_id'] = $userId;
+    //             $transferInfo['transfer_date'] = $transfer_date;
+    //             $transferInfo['note'] = stripBeforeSave($request->comments);
+    //             $transferInfo['quantity'] = $total;
+
+    //             $transfer_id = DB::table('stock_transfers')->insertGetId($transferInfo);
+
+    //             foreach ($itemIds as $key => $item_id) {
+    //                // Store In
+    //                $stockIn[$key]['item_id'] = $item_id;
+    //                $stockIn[$key]['transaction_type_id'] = $transfer_id;
+    //                $stockIn[$key]['transaction_type'] = 'STOCKMOVEIN';
+    //                $stockIn[$key]['location_id'] = $request->destination;
+    //                $stockIn[$key]['transaction_date'] = $transfer_date;
+    //                $stockIn[$key]['user_id'] = $userId;
+    //                $stockIn[$key]['reference'] = 'moved_from_'.$request->source;
+    //                $stockIn[$key]['note'] = stripBeforeSave($request->comments);
+    //                $stockIn[$key]['quantity'] = validateNumbers($itemQuantity[$key]);
+
+    //                // Store Out
+    //                $stockOut[$key]['item_id'] = $item_id;
+    //                $stockOut[$key]['transaction_type_id'] = $transfer_id;
+    //                $stockOut[$key]['transaction_type'] = 'STOCKMOVEOUT';
+    //                $stockOut[$key]['location_id'] = $request->source;
+    //                $stockOut[$key]['transaction_date'] = $transfer_date;
+    //                $stockOut[$key]['user_id'] = $userId;
+    //                $stockOut[$key]['reference'] = 'moved_in_'.$request->destination;
+    //                $stockOut[$key]['note'] = stripBeforeSave($request->comments);
+    //                $stockOut[$key]['quantity'] = '-'.validateNumbers($itemQuantity[$key]);
+    //         }
+
+    //         for ($i=0; $i < count($stockIds); $i++) {
+    //             DB::table('stock_moves')->insertGetId($stockOut[$i]);
+    //             DB::table('stock_moves')->insertGetId ($stockIn[$i]);
+    //         }
+
+    //         DB::commit();
+
+    //         \Session::flash('success', __('Successfully Saved'));
+    //         return redirect()->intended('stock_transfer/list');
+
+    //     } catch (Exception $e) {
+    //         DB::rollBack();
+    //         return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+    //     }
+    // }
 
     public function edit($id)
     {
         $data = ['menu' => 'purchase'];
         $data['sub_menu'] = 'stock_transfer';
         $data['page_title'] = __('Edit Stock Transfer');
-        $data['locationList'] = Location::getAll();
-        $data['Info'] = StockTransfer::with(['sourceLocation:id,name,is_active', 'destinationLocation:id,name,is_active'])->find($id);
+        $data['projectList'] = Project::getAll();
+        $data['Info'] = StockTransfer::with(['sourceProject:id,name,project_status_id', 'destinationProject:id,name,project_status_id'])->find($id);
         $data['List'] = StockMove::with(['item:id,name,is_stock_managed'])->where(['transaction_type_id' => $id, 'transaction_type' => 'STOCKMOVEIN'])->get();
         $data['stock_transfer_id'] = $id;
         if (!empty($data['Info'])) {
-            if ($data['Info']->sourceLocation->is_active == 0 || $data['Info']->destinationLocation->is_active == 0) {
-                \Session::now('fail', __('Can not perform any action, location inactive.'));
+            if ($data['Info']->sourceProject->project_status_id != 0 || $data['Info']->destinationProject->project_status_id != 0) {
+                \Session::now('fail', __('Can not perform any action, Project inactive.'));
             }
             return view('admin.stockTransfer.edit', $data);
         } else {
             return redirect()->back()->withErrors(__('The data you are trying to access is not found.'));
         }
     }
+    // public function edit($id)
+    // {
+    //     $data = ['menu' => 'purchase'];
+    //     $data['sub_menu'] = 'stock_transfer';
+    //     $data['page_title'] = __('Edit Stock Transfer');
+    //     $data['locationList'] = Location::getAll();
+    //     $data['Info'] = StockTransfer::with(['sourceLocation:id,name,is_active', 'destinationLocation:id,name,is_active'])->find($id);
+    //     $data['List'] = StockMove::with(['item:id,name,is_stock_managed'])->where(['transaction_type_id' => $id, 'transaction_type' => 'STOCKMOVEIN'])->get();
+    //     $data['stock_transfer_id'] = $id;
+    //     if (!empty($data['Info'])) {
+    //         if ($data['Info']->sourceLocation->is_active == 0 || $data['Info']->destinationLocation->is_active == 0) {
+    //             \Session::now('fail', __('Can not perform any action, location inactive.'));
+    //         }
+    //         return view('admin.stockTransfer.edit', $data);
+    //     } else {
+    //         return redirect()->back()->withErrors(__('The data you are trying to access is not found.'));
+    //     }
+    // }
 
     public function update(Request $request)
     {
@@ -323,14 +450,15 @@ class StockTransferController extends Controller
 
     public function itemSearch(Request $request)
     {
-        $location_id = $request->location;
+        $project_id = $request->location;
         $data = array();
+        $return_arr = array();
         $data['status_no'] = 0;
         $data['message'] = __('No Item Found');
         $data['items'] = array();
 
-        $items = Item::with(['available' => function ($query) use($location_id) {
-                    $query->where('location_id', $location_id);
+        $items = Item::with(['available' => function ($query) use($project_id) {
+                    $query->where('project_id', $project_id);
                 }])->where('name', 'LIKE', '%' . $request->search . '%')
                     ->where('item_type', 'product')
                     ->where('is_active', 1)
@@ -365,16 +493,60 @@ class StockTransferController extends Controller
         echo json_encode($data);
         exit();
     }
+    // public function itemSearch(Request $request)
+    // {
+    //     $location_id = $request->location;
+    //     $data = array();
+    //     $data['status_no'] = 0;
+    //     $data['message'] = __('No Item Found');
+    //     $data['items'] = array();
+
+    //     $items = Item::with(['available' => function ($query) use($location_id) {
+    //                 $query->where('location_id', $location_id);
+    //             }])->where('name', 'LIKE', '%' . $request->search . '%')
+    //                 ->where('item_type', 'product')
+    //                 ->where('is_active', 1)
+    //                 ->limit(10)
+    //                 ->get();
+    //     $transfers = null;
+    //     if (isset($request->transfer_id)) {
+    //         $transfers = StockMove::with(['item:id,name,is_stock_managed'])->where(['transaction_type_id' => $request->transfer_id, 'transaction_type' => 'STOCKMOVEIN'])->pluck('quantity', 'item_id')->toArray();
+    //     }
+
+    //     if (!empty($items)) {
+    //         $data['status_no'] = 1;
+    //         $data['message'] = __('Item Found');
+    //         $i = 0;
+    //         foreach ($items as $key => $value) {
+    //             if ($value->is_stock_managed == 0 || ($value->is_stock_managed == 1 && !is_null($value->available))) {
+    //                 $return_arr[$i]['id'] = $value->id;
+    //                 $return_arr[$i]['name'] = $value->name;
+    //                 $return_arr[$i]['is_stock_managed'] = $value->is_stock_managed;
+    //                 $return_arr[$i]['available'] = 0;
+    //                 if ($value->available) {
+    //                     $return_arr[$i]['available'] = $value->available->quantity;
+    //                 }
+    //                 if (!empty($transfers) && isset($transfers[$value->id])) {
+    //                     $return_arr[$i]['available'] += $transfers[$value->id];
+    //                 }
+    //                 $i++;
+    //             }
+    //         }
+    //         $data['items'] = $return_arr;
+    //     }
+    //     echo json_encode($data);
+    //     exit();
+    // }
 
     public function checkItemQty(Request $request)
     {
         $data = array();
-        $location = $request['source'];
+        $project = $request['source'];
         $item_id = $request['item_id'];
         $result = DB::table('stock_moves')
                      ->select(DB::raw('sum(quantity) as total'))
-                     ->where(['item_id' => $item_id, 'location_id' => $location])
-                     ->groupBy('location_id')
+                     ->where(['item_id' => $item_id, 'project_id' => $project])
+                     ->groupBy('project_id')
                      ->first();
         if (isset($result)) {
             $data['qty'] = $result->total;
@@ -387,6 +559,27 @@ class StockTransferController extends Controller
         return json_encode($data);
 
     }
+    // public function checkItemQty(Request $request)
+    // {
+    //     $data = array();
+    //     $location = $request['source'];
+    //     $item_id = $request['item_id'];
+    //     $result = DB::table('stock_moves')
+    //                  ->select(DB::raw('sum(quantity) as total'))
+    //                  ->where(['item_id' => $item_id, 'location_id' => $location])
+    //                  ->groupBy('location_id')
+    //                  ->first();
+    //     if (isset($result)) {
+    //         $data['qty'] = $result->total;
+    //         $data['status_no'] = 1;
+    //     } else {
+    //         $data['qty'] = 0;
+    //         $data['status_no'] = 0;
+    //     }
+    //     $data['message'] = 'Available quantity is '. $data['qty'];
+    //     return json_encode($data);
+
+    // }
 
     public function checkOldItemQty(Request $request)
     {
@@ -410,7 +603,9 @@ class StockTransferController extends Controller
         $source = $request['source'];
         $data['status_no'] = 0;
         $destination = '';
-        $result = DB::table('locations')->select('id', 'name')->where('id', '!=', $source)->where('is_active', 1)->orderBy('name','ASC')->get();
+        $projectStatus = ProjectStatus::where('name', 'In Progress')->first();
+        // $result = DB::table('locations')->select('id', 'name')->where('id', '!=', $source)->where('is_active', 1)->orderBy('name','ASC')->get();
+        $result = DB::table('projects')->select('id', 'name')->where('project_status_id', $projectStatus->id)->where('id', '!=', $source)->orderBy('name','ASC')->get();
         if (!empty($result)) {
             $data['status_no'] = 1;
             // This flag is set only at filtering in list view. Otherwise it will be not set

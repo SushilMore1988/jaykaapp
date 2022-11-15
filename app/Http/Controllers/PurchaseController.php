@@ -27,6 +27,7 @@ use App\Models\{
     TaxType,
     TransactionReference,
     Project,
+    ProjectStatus,
     WorkType,
 };
 use App\Http\{
@@ -136,7 +137,8 @@ class PurchaseController extends Controller
         $data['custom_tax_type'] = $selectStartCustom . $taxOptions . $selectEndCustom . $taxHiddenField;
         $data['tax_type_custom'] = $selectStartCustom . $taxOptions . $selectEndCustom;
         $preference              = Preference::getAll()->pluck('value', 'field')->toArray();
-        $data['projects']        = Project::all();
+        $projectStatus           = ProjectStatus::where('name', 'In Progress')->first();
+        $data['projects']        = Project::where('project_status_id', $projectStatus->id)->get();
         $data['items']           = Item::all();
         $data['workTypes']       = WorkType::where('parent_id', '!=', NULL)->get();
         $data['exchange_rate_decimal_digits'] = $preference['exchange_rate_decimal_digits'];
@@ -404,7 +406,7 @@ class PurchaseController extends Controller
         $data['purchaseData']         = PurchaseOrder::with([
                                                                 'supplier:id,name,email,street,contact,city,state,zipcode,country_id',
                                                                 'purchaseOrderDetails',
-                                                                'location:id,name',
+                                                                'project:id,name',
                                                                 'currency:id,name,symbol'])
                                                         ->find($id);
         if (empty($data['purchaseData'])) {
@@ -419,6 +421,7 @@ class PurchaseController extends Controller
         $data['supplierData']         = Supplier::with('currency','country')->find($data['purchaseData']->supplier_id);
         $data['currencySymbol'] = $data['supplierData']->currency->symbol;
        //$data['locations']            = Location::getAll()->where('is_active', 1);
+       $data['projects']            = Project::getAll()->where('is_active', 1);
         $data['paymentTerms']         = PaymentTerm::getAll();
         $data['purchaseReceiveTypes'] = PurchaseReceiveType::getAll();
         $data['taxTypeList']          = TaxType::getAll();
@@ -448,6 +451,60 @@ class PurchaseController extends Controller
 
         return view('admin.purchase.edit', $data);
     }
+    // public function edit($id)
+    // {
+    //     $data['menu'] = 'purchase';
+    //     $data['sub_menu'] = 'purchase/list';
+    //     $data['page_title'] = __('Edit Purchase');
+    //     $data['url'] = 'purchase/list';
+    //     $data['saleTypes']            = SaleType::getAll();
+    //     $data['purchaseData']         = PurchaseOrder::with([
+    //                                                             'supplier:id,name,email,street,contact,city,state,zipcode,country_id',
+    //                                                             'purchaseOrderDetails',
+    //                                                             'location:id,name',
+    //                                                             'currency:id,name,symbol'])
+    //                                                     ->find($id);
+    //     if (empty($data['purchaseData'])) {
+    //         Session::flash('fail', __('The data you are trying to access is not found.'));
+    //         return redirect()->back();
+    //     }
+    //     foreach ($data['purchaseData']->purchaseOrderDetails as $key => $value) {
+    //         if ($data['purchaseData']->has_tax == 1 && $value->quantity_ordered > 0) {
+    //             $value->taxList = (new PurchaseTax)->getPurchaseTaxes($value->id);
+    //         }
+    //     }
+    //     $data['supplierData']         = Supplier::with('currency','country')->find($data['purchaseData']->supplier_id);
+    //     $data['currencySymbol'] = $data['supplierData']->currency->symbol;
+    //    //$data['locations']            = Location::getAll()->where('is_active', 1);
+    //     $data['paymentTerms']         = PaymentTerm::getAll();
+    //     $data['purchaseReceiveTypes'] = PurchaseReceiveType::getAll();
+    //     $data['taxTypeList']          = TaxType::getAll();
+    //     $data['receiveData']          = (new ReceivedOrder)->getReceivedData($id);
+    //     $data['currencies']           = Currency::all();
+    //     $data['countries']            = Country::getAll();
+    //     $data['default_currency']     = Preference::getAll()->where('field', 'dflt_currency_id')->where('category', 'company')->first();
+
+    //     $taxOptions = '';
+    //     $selectStart = "<select name='item_tax[]' class='inputTax form-control bootstrap-select selectpicker' multiple>";
+    //     $selectEnd = "</select>";
+    //     foreach ($data['taxTypeList'] as $key => $value) {
+    //         $taxOptions .= "<option title='" . $value->tax_rate . "%' value='" . $value->id . "' taxrate='" . $value->tax_rate . "'>" . $value->name . '(' . $value->tax_rate . ')' . "</option>";
+    //     }
+    //     $data['tax_type'] = $selectStart . $taxOptions . $selectEnd;
+
+    //     $data['files'] = (new File)->getFiles('Purchase Order', $id);
+    //     if (!empty($data['files'])) {
+    //         $data['filePath'] = "uploads/purchase_order";
+    //         foreach ($data['files'] as $key => $value) {
+    //             $value->fileName = implode(" ",array_slice(explode('_', $value->file),2));
+    //             $value->icon = getFileIcon($value->file_name);
+    //         }
+    //     }
+    //     $preference               = Preference::getAll()->pluck('value', 'field')->toArray();
+    //     $data['exchange_rate_decimal_digits'] = $preference['exchange_rate_decimal_digits'];
+
+    //     return view('admin.purchase.edit', $data);
+    // }
 
     /**
      * Update the specified resource in storage.

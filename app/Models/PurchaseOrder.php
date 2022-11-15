@@ -29,6 +29,11 @@ class PurchaseOrder extends Model
         return $this->belongsTo('App\Models\Location', 'location_id');
     }
 
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project', 'project_id');
+    }
+
     public function paymentTerm()
     {
         return $this->belongsTo('App\Models\PaymentTerm', 'payment_term_id');

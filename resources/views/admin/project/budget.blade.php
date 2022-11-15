@@ -57,12 +57,41 @@
                                 </thead>
                                 <tbody>
                                 @foreach($budget as $data)
-                                  <tr>
+                                  <tr {{ $data->getRemainingBudget() < 0 ? 'style=background-color:#d67373;color:white;' : '' }}>
                                       <td>{{ $loop->index + 1 }}</td>
                                       <td>{{ $data->workType->name }}</td>
                                       <td>{{ $data->budget }}</td>
                                       <td>{{ $data->getRemainingBudget() }}</td>
-                                      <td>edit/delete</td>
+                                      <td>
+                                        <a href="#" data-toggle="modal" data-target="#editModal{{ $data->id }}" class="btn btn-xs btn-primary"><i class="feather icon-edit"></i></a>
+
+                                        <!-- Edit Modal -->
+                                        <div class="modal fade" id="editModal{{ $data->id }}" role="dialog">
+                                          <div class="modal-dialog">
+                                              <!-- Modal content-->
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <p class="text-lg">Edit Budget For {{ $data->workType->name }}</p>
+                                                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form action="{{ url('budget/update') }}"  method="post" class="needs-validation" novalidate>
+                                                        @csrf
+                                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                        <input type="hidden" name="work_type" value="{{ $data->work_type }}">
+                                                        <div class="form-group">
+                                                            <label for="Budget">Budget</label>
+                                                            <input type="number" class="form-control p-2" name="budget" value="{{$data->budget}}">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                      </form>
+                                                    </div>
+                                                  </div>
+                                          </div>
+                                        </div>
+                                        <!-- Modal -->
+                                      </td>
                                   </tr>
                                 @endforeach
                               </tbody>

@@ -891,6 +891,7 @@ Route::group(['middleware' => ['auth', 'locale'] ], function() {
 
     //Budget
     Route::post('budget/store', 'BudgetController@store');
+    Route::post('budget/update', 'BudgetController@update');
 
 
 

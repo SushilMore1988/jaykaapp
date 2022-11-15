@@ -79,9 +79,23 @@ class BudgetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        
+        $request->validate([
+            'work_type' => 'required',
+            'project_id' => 'required',
+            'budget' => 'required',
+        ]);
+
+        Budget::updateOrCreate([
+            'work_type' => $request->work_type,
+            'project_id' => $request->project_id,
+        ],[
+            'budget' => $request->budget,
+        ]);
+
+        return Redirect::back()->with('success','Budget created successfully.');
     }
 
     /**

@@ -54,32 +54,35 @@
               @endif
             </select>
           </div>
-
-
-
-
-
-
         <div class="ticket-filter col-xl-3 col-md-2 col-sm-2 col-xs-12 mb-2">
-            <select class="form-control select2" name="destination" id="destination">
-              <option value="">{{ __('All Destination') }}</option>
-              @if( (! empty($destination) && $destination != 'all') || (! empty($source) && $source != 'all') )
-                @foreach($locationList as $location)
-                  <option value="{{$location->id}}" <?= ($location->id == $destination) ? 'selected' : ''?>>{{$location->name}}</option>
-                @endforeach
-              @else
-                @foreach($sourceList as $location)
-                  <option value="{{$location->id}}" <?= ($location->id == $source) ? 'selected' : ''?>>{{$location->name}}</option>
-                @endforeach
-              @endif
-            </select>
-          </div>
-          <div class="col-xl-1 col-md-1 col-sm-1 col-xs-12 p-md-0">
-            <button type="submit" name="btn" title="{{ __('Click to filte') }}r" class="btn btn-primary custom-btn-small push-sm-right mt-0 mr-0">{{ __('Go') }}</button>
-          </div>
+          <select class="form-control select2" name="destination" id="destination">
+            <option value="">{{ __('All Destination') }}</option>
+            @if( (! empty($destination) && $destination != 'all') || (! empty($source) && $source != 'all') )
+              @foreach($projects as $project)
+                <option value="{{$project->id}}" <?= ($project->id == $destination) ? 'selected' : ''?>>{{$project->name}}</option>
+              @endforeach
+            @else
+              @foreach($sourceList as $project)
+                <option value="{{$project->id}}" <?= ($project->id == $source) ? 'selected' : ''?>>{{$project->name}}</option>
+              @endforeach
+            @endif
+            {{-- @if( (! empty($destination) && $destination != 'all') || (! empty($source) && $source != 'all') )
+              @foreach($locationList as $location)
+                <option value="{{$location->id}}" <?= ($location->id == $destination) ? 'selected' : ''?>>{{$location->name}}</option>
+              @endforeach
+            @else
+              @foreach($sourceList as $location)
+                <option value="{{$location->id}}" <?= ($location->id == $source) ? 'selected' : ''?>>{{$location->name}}</option>
+              @endforeach
+            @endif --}}
+          </select>
+        </div>
+        <div class="col-xl-1 col-md-1 col-sm-1 col-xs-12 p-md-0">
+          <button type="submit" name="btn" title="{{ __('Click to filte') }}r" class="btn btn-primary custom-btn-small push-sm-right mt-0 mr-0">{{ __('Go') }}</button>
         </div>
       </div>
-    </form>
+    </div>
+  </form>
 @endsection
 
 

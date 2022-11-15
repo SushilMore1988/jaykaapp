@@ -10,6 +10,7 @@ use App\Models\Preference;
 use App\Models\Location;
 use App\Models\StockAdjustment;
 use App\Models\Item;
+use App\Models\Project;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,8 @@ class StockAdjustmentController extends Controller
         $data['to'] = isset($_GET['to'])?$_GET['to']:null;
         $data['trans_type'] = $trans_type = isset($_GET['trans_type']) ? $_GET['trans_type'] : 'all';
         $data['destination'] = $destination = isset($_GET['destination']) ? $_GET['destination'] : 'all';
-        $data['locationList'] = Location::getAll()->where('is_active', 1);
+        // $data['locationList'] = Location::getAll()->where('is_active', 1);
+        $data['projectList'] = Project::getAll();
 
         $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first()->value;
 
@@ -41,7 +43,8 @@ class StockAdjustmentController extends Controller
     public function create()
     {
         $data = ['menu' => 'purchase', 'sub_menu' => 'adjustment', 'page_title' => __('Create Stock Adjustment')];
-        $data['locationList'] = Location::getAll()->where('is_active', 1);
+        $data['projectList'] = Project::getAll();
+        // $data['locationList'] = Location::getAll()->where('is_active', 1);
 
         return view('admin.adjustment.add', $data);
     }
@@ -49,7 +52,8 @@ class StockAdjustmentController extends Controller
     public function edit($id)
     {
         $data = ['menu' => 'purchase', 'sub_menu' => 'adjustment', 'page_title' => __('Edit Stock Adjustment')];
-        $data['locationList'] = Location::getAll();
+        // $data['locationList'] = Location::getAll();
+        $data['projectList'] = Project::getAll();
         $data['info'] = StockAdjustment::with(['location:id,name,is_active', 'stockAdjustmentDetails'])->find($id);
         if (!empty($data['info'])) {
             if ($data['info']->location->is_active == 0) {

@@ -92,6 +92,16 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group row">
+                  <label class="col-form-label col-md-4">{{ __('Project') }}</label>
+                  <div class="col-md-8 p-md-0">
+                    <select class="select2" name="project" id="project">
+                      @foreach($projects as $data)
+                        <option value="{{ $data->id }}" {{ $data->id == $purchaseData->project_id ? 'selected':'' }} >{{ $data->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                {{-- <div class="form-group row">
                   <label class="col-form-label col-md-4">{{ __('Location') }}</label>
                   <div class="col-md-8 p-md-0">
                     <select class="select2" name="location" id="location">
@@ -100,7 +110,7 @@
                       @endforeach
                     </select>
                   </div>
-                </div>
+                </div> --}}
                 <div class="form-group row">
                   <label class="col-form-label col-md-4">{{ __('Date') }}</label>
                   <div class="input-group date col-md-8 p-md-0">

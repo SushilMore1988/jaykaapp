@@ -644,6 +644,7 @@ class ProjectController extends Controller
       $data['budget'] = Budget::
       where('project_id', $id)
       ->get();
+      
       // if ($data['project']->due_date == null) {
       //   $datediff = time() - strtotime($data['project']->begin_date);
       //   $data['dayCount'] = abs(intval(round($datediff / (60 * 60 * 24))));

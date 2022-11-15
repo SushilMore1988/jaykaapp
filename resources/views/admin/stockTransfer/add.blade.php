@@ -37,8 +37,11 @@
                 <label class="control-label require">{{ __('Source') }}</label>
                 <select class="js-example-basic-single form-control" name="source" id="source">
                   <option value="">{{ __('All Source') }}</option>
-                  @foreach($locationList as $data)
-                  <option value="{{$data->id}}" data-name="{{  $data->name }}">{{$data->name}}</option>
+                  {{-- @foreach($locationList as $data)
+                    <option value="{{$data->id}}" data-name="{{  $data->name }}">{{$data->name}}</option>
+                  @endforeach --}}
+                  @foreach($projectList as $data)
+                    <option value="{{$data->id}}" data-name="{{  $data->name }}">{{$data->name}}</option>
                   @endforeach
                 </select>
                 <label id="source-error" class="error mb-0" for="source"></label>

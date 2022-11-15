@@ -34,6 +34,11 @@ class Item extends Model
     return $this->belongsTo("App\Models\StockCategory", 'stock_category_id');
   }
 
+  public function workType()
+  {
+    return $this->belongsTo("App\Models\WorkType", 'work_type_id');
+  }
+
   public function parent()
   {
       return $this->belongsTo("App\Models\Item", 'parent_id');
