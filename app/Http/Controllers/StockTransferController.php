@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Start\Helpers;
 use App\Models\Preference;
 use App\Models\Location;
+use App\Models\Project;
 use App\Models\StockMove;
 use App\Models\StockTransfer;
 use App\Models\Item;
@@ -44,8 +45,11 @@ class StockTransferController extends Controller
         $stockTransfer = DB::table('stock_transfers')->get();
 
         $data['sourceList'] = Location::getAll();
+        $data['projects'] = Project::getAll();
+        $data['selectedID'] = 1;
         $data['destinationList'] = Location::getAll()->where('is_active', '=', 1)->where('id', '!=', $source);
         $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first()->value;
+
 
         return $dataTable->with('row_per_page', $row_per_page)->render('admin.stockTransfer.list',$data);
     }
@@ -61,6 +65,8 @@ class StockTransferController extends Controller
         $data['sub_menu'] = 'stock_transfer';
         $data['page_title'] = __('Create Stock Transfers');
         $data['locationList'] = Location::getAll()->where('is_active', 1);
+
+
         return view('admin.stockTransfer.add', $data);
     }
 
