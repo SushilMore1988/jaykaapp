@@ -39,7 +39,7 @@ Purchase Order
 
 
 
-Change Testing to review in tasks tab of project
+Change Testing to review in tasks tab of project = done
 
 Check timesheets
 

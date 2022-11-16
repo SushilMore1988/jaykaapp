@@ -56,6 +56,7 @@ class ProjectController extends Controller
     $data['project_type'] = (isset($_GET['project_type']) && $_GET['project_type'] != '') ? $_GET['project_type'] : ['customer', 'product', 'in_house'];
 
     $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first('value')->value;
+ 
 
     return $this->projectDataTable->with('row_per_page', $row_per_page)->render('admin.project.list', $data);
   }
@@ -644,7 +645,7 @@ class ProjectController extends Controller
       $data['budget'] = Budget::
       where('project_id', $id)
       ->get();
-      
+
       // if ($data['project']->due_date == null) {
       //   $datediff = time() - strtotime($data['project']->begin_date);
       //   $data['dayCount'] = abs(intval(round($datediff / (60 * 60 * 24))));

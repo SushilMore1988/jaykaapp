@@ -563,6 +563,7 @@ Route::group(['middleware' => ['auth', 'locale'] ], function() {
 	Route::get('report/sale_report_filterwise', 'ReportController@salesReportByDate');
 	Route::get('report/sales-report-by-date-csv/{date}', 'ReportController@salesReportByDateCsv');
 	Route::post('report/sales-report/get-customer', 'ReportController@getCustomerByCurrency');
+	Route::get('report/project-report', 'ReportController@projectReport');
 
 	// Purchase report
     Route::get('report/purchase-report', 'ReportController@purchaseReport')->middleware(['permission:manage_purchase_report']);

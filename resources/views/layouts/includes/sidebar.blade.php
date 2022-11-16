@@ -187,9 +187,9 @@
                         <li class="{{ isset($sub_menu) && $sub_menu == 'transaction/income-vs-expense' ? 'active' : '' }}"><a href="{{ url('transaction/income-vs-expense') }}" class="">{{ __('Income vs Expenses') }}</a></li>
                         @endif
 
-                        {{-- @if(Helpers::has_permission(Auth::user()->id, 'manage_lead'))
-                        <li class="{{ isset($sub_menu) && $sub_menu == 'leads-report' ? 'active' : '' }}"><a href="{{ url('report/leads-report') }}" class="">{{ __('Leads Report') }}</a></li>
-                        @endif --}}
+                        @if(Helpers::has_permission(Auth::user()->id, 'manage_lead'))
+                        <li class="{{ isset($sub_menu) && $sub_menu == 'leads-report' ? 'active' : '' }}"><a href="{{ url('report/project-report') }}" class="">{{ __('Projects Report') }}</a></li>
+                        @endif
                     </ul>
                 </li>
                 @endif

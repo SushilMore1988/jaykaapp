@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ProjectDataTable;
 use App\DataTables\InventoryStockOnHandDataTable;
 use App\DataTables\PurchaseReportDataTable;
 use App\DataTables\SalesHistoryReportDataTable;
@@ -25,11 +26,16 @@ use App\Models\SaleOrder;
 use App\Models\Lead;
 use App\Models\LeadStatus;
 use App\Models\LeadSource;
+use App\Models\Project;
+use App\Models\ProjectStatus;
+use App\Models\ProjectSetting;
+use App\Models\Task;
 use DB;
 use Excel;
 use Illuminate\Http\Request;
 use PDF;
 use Session;
+use DataTables;
 
 class ReportController extends Controller
 {
@@ -658,5 +664,27 @@ class ReportController extends Controller
         $data['months'] = $months;
         $data['colors'] = ['#DD4B39', '#4483F0', '#FFA09A', '#00A65A', '#F39C12', '#00C0EF', '#3C8DBC', '#E5FFFF', '#BCBE36', '#A261FA', '#F0E69C', '#0059b6'];
         return view('admin.report.leads_report', $data);
+    }
+
+    public function projectReport(Request $request,Project $project, ProjectDataTable $projectDataTable,EmailController $email, Task $task)
+    {
+
+        $this->request          = $request;
+        $this->project          = $project;
+        $this->projectDataTable = $projectDataTable;
+        $this->email            = $email;
+        $this->task             = $task;
+
+        $data['menu']   = 'project';
+        $data['header'] = 'project';
+        $data['page_title'] = __('Projects');
+        $data['status'] = DB::table('project_statuses')->select('id','name')->get();
+        $data['from']         = $from = isset($_GET['from']) ? $_GET['from'] : null;
+        $data['to']           = $to = isset($_GET['to']) ? $_GET['to'] : null;
+        $data['allstatus']    = $allstatus = isset($_GET['status']) ? $_GET['status'] : '';
+        $data['project_type'] = (isset($_GET['project_type']) && $_GET['project_type'] != '') ? $_GET['project_type'] : ['customer', 'product', 'in_house'];
+
+        $row_per_page = Preference::getAll()->where('field', 'row_per_page')->first('value')->value;
+        return $this->projectDataTable->with('row_per_page', $row_per_page)->render('admin.report.project_report', $data);
     }
 }

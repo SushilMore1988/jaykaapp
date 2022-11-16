@@ -36,7 +36,7 @@ class Project extends Model
         return $this->hasMany('App\Models\Ticket', 'project_id');
     }
     //Relation End
-    
+
     public static function getAll()
     {
       $data = Cache::get('gb-projects');
@@ -53,7 +53,7 @@ class Project extends Model
             ->leftJoin('customers', 'customers.id', '=', 'projects.customer_id')
             ->leftJoin('project_statuses', 'project_statuses.id', '=', 'projects.project_status_id')
             ->select('projects.id as project_id', 'projects.name', 'projects.project_type', 'projects.detail', 'projects.charge_type', 'projects.begin_date', 'projects.due_date', 'customers.first_name', 'customers.last_name', 'customers.id as customer_id', 'project_statuses.name as status_name', 'project_statuses.id as status_id');
-            
+
           if (!empty($from) && !empty($to)) {
             $from = DbDateFormat($from);
             $to   = DbDateFormat($to);
@@ -72,11 +72,11 @@ class Project extends Model
           if (Helpers::has_permission(Auth::user()->id, 'own_project') && !Helpers::has_permission(Auth::user()->id, 'manage_project')) {
             $id = Auth::user()->id;
             $result->where('projects.user_id', $id);
-          } 
+          }
           return $result;
     }
 
-    public function getLatestProject($from = null, $to = null) 
+    public function getLatestProject($from = null, $to = null)
     {
       $data = [];
       $query = [];
@@ -202,7 +202,7 @@ class Project extends Model
                   $join->whereRaw('tasks.related_to_type = 1');
               })
             ->select('projects.id as project_id', 'projects.name', 'projects.project_type', 'projects.detail', 'projects.charge_type', 'projects.begin_date', 'projects.due_date', 'customers.first_name', 'customers.last_name', 'customers.id as customer_id', 'project_statuses.name as status_name', 'project_statuses.id as status_id', 'tasks.id as task_id', 'tasks.name as task_name', 'tasks.related_to_id as task_related_to_id', 'tasks.related_to_type as task_related_to_type', 'tasks.task_status_id as task_status_id');
-            
+
       if ($from && $to) {
         $from = DbDateFormat($from);
         $to   = DbDateFormat($to);

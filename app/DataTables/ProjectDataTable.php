@@ -86,6 +86,7 @@ class ProjectDataTable extends DataTable{
         $from = isset($_GET['from']) ? $_GET['from'] : null;
         $to = isset($_GET['to']) ? $_GET['to'] : null;
         $projects = (new Project())->getAllProjectDT($from, $to, $status, $project_type);
+     
         return $this->applyScopes($projects);
     }
 
